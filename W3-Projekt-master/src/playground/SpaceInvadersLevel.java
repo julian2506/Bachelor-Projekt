@@ -16,6 +16,7 @@ import controller.FallingStarController;
 import controller.LimitedTimeController;
 import controller.ObjectController;
 import controller.EgoController;
+import gameobjects.AnimatedGameobject;
 import gameobjects.BitmapObject;
 import gameobjects.FallingStar;
 import gameobjects.GameObject;
@@ -51,8 +52,8 @@ public class SpaceInvadersLevel extends KeyboardControl {
   public static final double STARTPERIOD    = 5.;
   public static final double DYING_INTERVAL = 2.0 ;
 
-
-  protected BufferedImage    alienImage     = null;
+  public BufferedImage alienImage;
+  
   protected boolean          lost           = false;
   protected boolean          doneLevel      = false;
 
@@ -111,11 +112,11 @@ public class SpaceInvadersLevel extends KeyboardControl {
     return "Get ready for level X!" ;
   }
 
-
+  // generieren der Enemys (anzahl), einfügen des bildes weiter unten
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
           double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
-    return new BitmapObject(name, this, enemyController, x_enemy, y_enemy,
-          vx_enemy, vy_enemy, this.alienImage, this.canvasX / 10, this.canvasY / 10);
+      return new AnimatedGameobject(name, this, enemyController, x_enemy, y_enemy,
+              vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.1);
   }
 
 
@@ -279,12 +280,12 @@ public class SpaceInvadersLevel extends KeyboardControl {
     setFlag("egoLives", Integer.valueOf(3));
     setFlag("dying", Double.valueOf(-1));
 
-    // pre-load alien Image from disk
-    this.alienImage = null;
+ // pre-load alien Image from disk
+    /*this.alienImage = null;
     try {
-      this.alienImage = ImageIO.read(new File("./alien2.png"));
+      this.alienImage = ImageIO.read(new File("./alien0.png"));
     } catch (IOException e) {
-    }
+    }*/
 
   }
 
@@ -325,8 +326,8 @@ public class SpaceInvadersLevel extends KeyboardControl {
     as2.addAttribute(TextAttribute.FOREGROUND, Color.yellow);
     g2.drawString(as2.getIterator(), canvasX-100, 20);
     
-    //ergaenzt durch JW, draw highscore in left part of playground under score
-    Integer highscore = (Integer) getFlag("highscore");
+  //ergaenzt durch JW, draw highscore in left part of playground under score
+    /*Integer highscore = (Integer) getFlag("highscore");
     Font drawFont3 = new Font("SansSerif", Font.PLAIN, 20);
     AttributedString as3 = new AttributedString("Highscore: " + highscore);
     as3.addAttribute(TextAttribute.FONT, drawFont3);
@@ -343,7 +344,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
     	alltimeHighscore = currentScore;
         setFlag("highscore",alltimeHighscore);
     	dh.closeFile();
-     }
+    }*/
     
   }
 
@@ -450,9 +451,8 @@ public class SpaceInvadersLevel extends KeyboardControl {
     return doneLevel;
   }
   
-  
-  // Klasse um Highscore umzusetzen
-  public static class DateiHandler {
+//Klasse um Highscore umzusetzen
+ public static class DateiHandler {
 	  Scanner s;
 	  
 	  public DateiHandler(File f){
@@ -485,8 +485,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
 	  s.close();
 	  }
 	  
-  } 
-  
+ } 
 
 
 }

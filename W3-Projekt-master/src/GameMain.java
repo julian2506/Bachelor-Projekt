@@ -18,6 +18,7 @@ import playground.Level4;
 import playground.BossLevel;
 import playground.MonsterLevel;
 import playground.HitTwiceLevel;
+import playground.Level0;
 import playground.BonusLevel;
 
 import playground.Playground;
@@ -49,7 +50,7 @@ public class GameMain {
     ArrayList<Playground> levels = new ArrayList<Playground>();
     // levels.add(new BossLevel(SIZEX, SIZEY));
     //levels.add(new BonusLevel(SIZEX, SIZEY));
-    levels.add(new Level4(SIZEX, SIZEY));
+    levels.add(new Level0(SIZEX, SIZEY));
     
     
     GameUI gameUI = new GameUI(SIZEX, SIZEY);
