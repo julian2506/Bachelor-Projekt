@@ -47,7 +47,7 @@ public class GameMain {
 
   public static void main(String[] args) throws IOException {
     ArrayList<Playground> levels = new ArrayList<Playground>();
-    // levels.add(new BossLevel(SIZEX, SIZEY));
+    //levels.add(new BossLevel(SIZEX, SIZEY));
     //levels.add(new BonusLevel(SIZEX, SIZEY));
     levels.add(new Level4(SIZEX, SIZEY));
     
