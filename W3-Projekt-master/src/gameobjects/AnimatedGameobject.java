@@ -20,17 +20,18 @@ public class AnimatedGameobject extends GameObject{
 	private int totalFrames = 3;
 	private int counter = 0;
 	int currentFrame = 0;
-	int second;
+	int second = 0;
 	
-	/*Timer timer = new Timer();
+	Timer timer = new Timer();
 	TimerTask task = new TimerTask() {
 		public void run() {
 			second++;
 		}	
-	};*/
+	};
 
 	
-	public AnimatedGameobject(String id, Playground pg, ObjectController o, double x, double y, double vx,
+	public AnimatedGameobject(String id, Playground pg, ObjectController o, 
+			double x, double y, double vx,
 		      double vy, double sizeX, double sizeY, double scale) {
 		super(id, pg, o, x, y, vx, vy);
 		try {
@@ -50,34 +51,55 @@ public class AnimatedGameobject extends GameObject{
 		    } catch (IOException e) {
 		    }
 		
-		//timer.scheduleAtFixedRate(task, 500, 1000);
 	}
 
 		
 	public void draw(Graphics2D g) {
 	    //System.out.println("drawing"+this.getId());
-		//System.out.println(second);
 		
-		if (currentFrame >= imageArray.length)  {
-			currentFrame = 0;
-			
-		}
+		if (currentFrame >= imageArray.length) currentFrame = 0;
 		
-		if(counter >= 100) {
-			
-		    // painted neues Frame wenn counter hoeher 100
-	    	g.drawImage(imageArray[currentFrame], (int) Math.round(x - rx), (int) Math.round(y - ry), (int) rx * 2,
-	    	  			(int) ry * 2, null);
-	    	
+		if(counter >= 200) {
+			g.drawImage(imageArray[currentFrame], (int) Math.round(x - rx), 
+					(int) Math.round(y - ry), (int) rx * 2,
+    	  			(int) ry * 2, null);
 	    	currentFrame++;
 	    	counter = 0;
-	    	
 		} else {
-			// zeigt currentFrame weiterhin an waehrend counter hochzaehlt bis neues Frame angezeigt wird
-			g.drawImage(imageArray[currentFrame], (int) Math.round(x - rx), (int) Math.round(y - ry), (int) rx * 2,
+			// zeigt currentFrame weiterhin an waehrend counter hochzaehlt 
+			// bis neues Frame angezeigt wird
+			g.drawImage(imageArray[currentFrame], (int) Math.round(x - rx), 
+					(int) Math.round(y - ry), (int) rx * 2,
     	  			(int) ry * 2, null);
 			counter++;
-		}
+		} 
+		
+		/*if(timer(2)) {
+		g.drawImage(imageArray[currentFrame], (int) Math.round(x - rx), (int) Math.round(y - ry), (int) rx * 2,
+	  			(int) ry * 2, null);
+	
+    	currentFrame++;
+    	//counter = 0;
+	}*/
 
 	} 
+	/*public boolean timer(int vergleich){
+		
+		timer.scheduleAtFixedRate(task, 500, 1000);
+		
+		if (second == 2) {
+			second = 0;
+			return true;
+		}
+		else return false;
+		
+		long time = System.currentTimeMillis();
+		System.out.println(time);
+		
+		if((time - System.currentTimeMillis()) % 10 == vergleich) {
+			return true;
+			
+		}
+		else return false;
+	}*/
 }
