@@ -3,6 +3,7 @@ package gameobjects;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import controller.ObjectController;
+import playground.Music;
 import playground.Playground;
 
 public class SimpleShot extends GameObject {
@@ -12,6 +13,8 @@ public class SimpleShot extends GameObject {
       double vy) {
     super(id, pg, o, x, y, vx, vy);
     setRectangleMode(3,10);
+    Music.music("laser.wav");
+
   }
 
   public void draw(Graphics2D g) {

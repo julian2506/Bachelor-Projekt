@@ -11,6 +11,10 @@ import java.io.*;
 import java.text.AttributedString;
 import java.util.LinkedList;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import controller.EnemyController;
 import controller.FallingStarController;
 import controller.LimitedTimeController;
@@ -21,7 +25,11 @@ import gameobjects.FallingStar;
 import gameobjects.GameObject;
 import gameobjects.EgoObject;
 import gameobjects.TextObject;
+import sun.applet.Main;
+
 import java.util.Scanner;
+
+
 
 /**
  * Class that realizes all the game logic of a very simple game level. The level contains for now
@@ -189,6 +197,9 @@ public class SpaceInvadersLevel extends KeyboardControl {
   
   void actionIfEnemyIsHit(GameObject e, GameObject shot, double gameTime) {
     createExplosion(gameTime, e, "shard", DYING_INTERVAL, Color.RED) ;
+    
+    //JW: ton abspielen
+    Music.music("smash.wav");
 
     // spawn a bonus points object
     double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
@@ -221,7 +232,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
           new LimitedTimeController(gameTime, BONUS_DURATION), ego.getX(), ego.getY() - 20,
           ego.getVX(), ego.getVY(), "AUAA!!", 10));
 
-
+      
       // deduct points
       Integer pts = (Integer) getFlag("points");
       setFlag("points", pts - 500);
@@ -276,13 +287,13 @@ public class SpaceInvadersLevel extends KeyboardControl {
     setFlag("enemyShotCounter", Integer.valueOf(0));
     setFlag("gameStatus", "start");
     setFlag("detailedStatus", "std");
-    setFlag("egoLives", Integer.valueOf(3));
+    setFlag("egoLives", Integer.valueOf(5));
     setFlag("dying", Double.valueOf(-1));
 
     // pre-load alien Image from disk
     this.alienImage = null;
     try {
-      this.alienImage = ImageIO.read(new File("./alien2.png"));
+      this.alienImage = ImageIO.read(new File("./alien.png"));
     } catch (IOException e) {
     }
 
@@ -368,7 +379,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
 
     } else if (gameStatus.equals("starting") == true) {
 
-      if (gameTime > 5.) {
+      if (gameTime > 1.) {
         setFlag("gameStatus", "init");
       }
 
@@ -394,9 +405,20 @@ public class SpaceInvadersLevel extends KeyboardControl {
         LinkedList<GameObject> shots = collectObjects("simpleShot", true);
         for (GameObject e : enemies) {
 
-          // if ego collides with enemy..
+         // if ego collides with enemy..
           if (s.getDistance(e) < 0) {
+        	// JW: Kollision von Player mit Enemy
+        	// if (Collision.EnemyHitsPlayer(s.getX(), s.getY(), 1, e.getX(), e.getY(), 2, 2)) {
             actionIfEgoCollidesWithEnemy(e, s, gameTime);
+            
+            // JW: an welchen Koordianten wurde Player getroffen?
+            System.out.println("x-Koordinate von Player " + s.getX());
+            System.out.println("y-Koordinate von Player " + s.getY());
+            System.out.println("x-Koordinate von Enemy " + e.getX());
+            System.out.println("y-Koordinate von Enemy " + e.getY());
+            System.out.println("                        ");
+
+            
           }
         
           // if short collides with enemy
@@ -486,7 +508,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
 	  }
 	  
   } 
-  
+  	  
 
 
 }
