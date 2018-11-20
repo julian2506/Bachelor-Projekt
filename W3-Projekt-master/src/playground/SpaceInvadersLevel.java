@@ -198,7 +198,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
   void actionIfEnemyIsHit(GameObject e, GameObject shot, double gameTime) {
     createExplosion(gameTime, e, "shard", DYING_INTERVAL, Color.RED) ;
     
-    //JW: ton anspielen
+    //JW: ton abspielen
     Music.music("smash.wav");
 
     // spawn a bonus points object
