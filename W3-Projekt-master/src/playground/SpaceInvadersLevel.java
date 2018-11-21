@@ -20,6 +20,7 @@ import controller.FallingStarController;
 import controller.LimitedTimeController;
 import controller.ObjectController;
 import controller.EgoController;
+import gameobjects.AnimatedGameobject;
 import gameobjects.BitmapObject;
 import gameobjects.FallingStar;
 import gameobjects.GameObject;
@@ -122,8 +123,8 @@ public class SpaceInvadersLevel extends KeyboardControl {
 
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
           double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
-    return new BitmapObject(name, this, enemyController, x_enemy, y_enemy,
-          vx_enemy, vy_enemy, this.alienImage, this.canvasX / 10, this.canvasY / 10);
+      return new AnimatedGameobject(name, this, enemyController, x_enemy, y_enemy,
+              vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.1);
   }
 
 
