@@ -13,7 +13,7 @@ public class SimpleShot extends GameObject {
       double vy) {
     super(id, pg, o, x, y, vx, vy);
     setRectangleMode(3,10);
-    Music.music("laser.wav");
+    Music.music("./W3-Projekt-master/laser.wav");
 
   }
 
