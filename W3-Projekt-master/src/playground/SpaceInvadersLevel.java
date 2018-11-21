@@ -61,7 +61,8 @@ public class SpaceInvadersLevel extends KeyboardControl {
   public static final double DYING_INTERVAL = 2.0 ;
 
 
-  protected BufferedImage    alienImage     = null;
+  protected BufferedImage[]  alienImage     = null;
+  protected int				 totalFrames	= 3;
   protected boolean          lost           = false;
   protected boolean          doneLevel      = false;
 
@@ -124,7 +125,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
           double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
       return new AnimatedGameobject(name, this, enemyController, x_enemy, y_enemy,
-              vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.1);
+              vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.1, alienImage);
   }
 
 
@@ -292,9 +293,11 @@ public class SpaceInvadersLevel extends KeyboardControl {
     setFlag("dying", Double.valueOf(-1));
 
     // pre-load alien Image from disk
-    this.alienImage = null;
+    this.alienImage = new BufferedImage[totalFrames];
     try {
-      this.alienImage = ImageIO.read(new File("./W3-Projekt-master/alien.png"));
+    	for (int i = 0; i < alienImage.length; i++ ) {
+    		alienImage[i] = ImageIO.read(new File("./W3-Projekt-master/boredAlien" + i + ".png"));
+    	}
     } catch (IOException e) {
     }
 

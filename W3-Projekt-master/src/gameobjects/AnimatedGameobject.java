@@ -32,14 +32,12 @@ public class AnimatedGameobject extends GameObject{
 	
 	public AnimatedGameobject(String id, Playground pg, ObjectController o, 
 			double x, double y, double vx,
-		      double vy, double sizeX, double sizeY, double scale) {
+		      double vy, double sizeX, double sizeY, double scale, BufferedImage[] imageArray) {
 		super(id, pg, o, x, y, vx, vy);
-		try {
-			imageArray = new BufferedImage[totalFrames];
+		
+			this.imageArray = imageArray;
+			
 				for (int i = 0; i < imageArray.length; i++ ) {
-					imageArray[i] = ImageIO.read(new File("./W3-Projekt-master/boredAlien" + i + ".png"));
-					//System.out.println("Gefuellt");
-
 				    setRadiusMode(imageArray[i].getWidth() * scale);
 				    double radX = (int) (imageArray[i].getWidth() * scale);
 				    double radY = (int) (imageArray[i].getHeight() * scale);
@@ -48,9 +46,6 @@ public class AnimatedGameobject extends GameObject{
 				      setRadiusMode(imageArray[i].getHeight() * scale);
 				    }
 				}
-		    } catch (IOException e) {
-		    }
-		
 	}
 
 		
