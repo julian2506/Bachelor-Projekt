@@ -199,7 +199,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
     createExplosion(gameTime, e, "shard", DYING_INTERVAL, Color.RED) ;
     
     //JW: ton abspielen
-    Music.music("smash.wav");
+    Music.music("./W3-Projekt-master/smash.wav");
 
     // spawn a bonus points object
     double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
@@ -293,7 +293,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
     // pre-load alien Image from disk
     this.alienImage = null;
     try {
-      this.alienImage = ImageIO.read(new File("./alien.png"));
+      this.alienImage = ImageIO.read(new File("./W3-Projekt-master/alien.png"));
     } catch (IOException e) {
     }
 
@@ -345,7 +345,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
     g2.drawString(as3.getIterator(), 10, 40);
     
     // JW: Highscore aktualisieren
-    File f = new File("/Users/julianwahl/_jwahl/Uni/5Semester/Bachelor-Projekt/W3-Projekt-master/highscore.txt");
+    File f = new File("./W3-Projekt-master/highscore.txt");
     DateiHandler dh = new DateiHandler(f);
     int alltimeHighscore = dh.readFile();
     setFlag("highscore",alltimeHighscore);
