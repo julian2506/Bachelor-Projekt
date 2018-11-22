@@ -349,7 +349,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
     g2.drawString(as3.getIterator(), 10, 40);
     
     // JW: Highscore aktualisieren
-    File f = new File("./W3-Projekt-master/highscore.txt");
+    File f = new File("./highscore.txt");
     DateiHandler dh = new DateiHandler(f);
     int alltimeHighscore = dh.readFile();
     setFlag("highscore",alltimeHighscore);
