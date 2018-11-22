@@ -3,6 +3,7 @@ package playground;
 import controller.FallingStarController;
 import controller.ObjectController;
 import controller.ZickZackController;
+import gameobjects.AnimatedGameobject;
 import gameobjects.BitmapObject;
 import gameobjects.FallingStar;
 import gameobjects.GameObject;
@@ -39,8 +40,8 @@ public class Level4 extends SpaceInvadersLevel {
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
       double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
     ObjectController zzController = new ZickZackController(gameTime, 0.5);
-    return new BitmapObject(name, this, zzController, x_enemy, y_enemy, vx_enemy, vy_enemy,
-        this.alienImage, this.canvasX / 10, this.canvasY / 10);
+    return new AnimatedGameobject(name, this, zzController, x_enemy, y_enemy,
+            vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.1, alienImage);
   }
 
 
