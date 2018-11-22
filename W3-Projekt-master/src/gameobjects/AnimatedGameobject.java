@@ -17,7 +17,6 @@ import playground.Playground;
 public class AnimatedGameobject extends GameObject{
 	
 	private BufferedImage[] imageArray;
-	private int totalFrames = 3;
 	private int counter = 0;
 	int currentFrame = 0;
 	int second = 0;
