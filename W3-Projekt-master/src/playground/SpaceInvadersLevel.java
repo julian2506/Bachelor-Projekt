@@ -201,7 +201,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
     createExplosion(gameTime, e, "shard", DYING_INTERVAL, Color.RED) ;
     
     //JW: ton abspielen
-    Music.music("./W3-Projekt-master/smash.wav");
+    Music.music("./smash.wav");
 
     // spawn a bonus points object
     double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
@@ -296,7 +296,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
     this.alienImage = new BufferedImage[totalFrames];
     try {
     	for (int i = 0; i < alienImage.length; i++ ) {
-    		alienImage[i] = ImageIO.read(new File("./W3-Projekt-master/boredAlien" + i + ".png"));
+    		alienImage[i] = ImageIO.read(new File("./boredAlien" + i + ".png"));
     	}
     } catch (IOException e) {
     }
