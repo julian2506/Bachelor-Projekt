@@ -67,7 +67,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
   protected boolean          lost           = false;
   protected boolean          doneLevel      = false;
   protected long   			 startzeit;
-  protected double 			 showtime		= 0.01; //sekunden
+  protected double 			 showtime		= 0.05; //sekunden
   protected String[]		 abspielmodus 	= null;
 
 
