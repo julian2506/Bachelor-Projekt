@@ -49,7 +49,7 @@ public class GameMain {
     ArrayList<Playground> levels = new ArrayList<Playground>();
     //levels.add(new BossLevel(SIZEX, SIZEY));
     //levels.add(new BonusLevel(SIZEX, SIZEY));
-    levels.add(new Level4(SIZEX, SIZEY));
+    levels.add(new Level1(SIZEX, SIZEY));
     
     
     GameUI gameUI = new GameUI(SIZEX, SIZEY);

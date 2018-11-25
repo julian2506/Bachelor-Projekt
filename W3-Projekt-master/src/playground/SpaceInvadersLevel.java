@@ -63,11 +63,11 @@ public class SpaceInvadersLevel extends KeyboardControl {
 
 
   protected BufferedImage[]  alienImage     = null;
-  protected int				 totalFrames	= 3;
+  protected int				 totalFrames	= 8;
   protected boolean          lost           = false;
   protected boolean          doneLevel      = false;
   protected long   			 startzeit;
-  protected double 			 showtime		= 0.1;
+  protected double 			 showtime		= 0.01; //sekunden
   protected String[]		 abspielmodus 	= null;
 
 
@@ -129,7 +129,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
           double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
       return new AnimatedGameobject(name, this, enemyController, x_enemy, y_enemy,
-              vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 3, 
+              vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.5, 
               this.alienImage, showtime, startzeit, "loop");
   }
 
@@ -302,6 +302,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
     try {
     	for (int i = 0; i < alienImage.length; i++ ) {
     		alienImage[i] = ImageIO.read(new File("./sweetAlien" + i + ".png"));
+    		//System.out.println("filled");
     	}
     } catch (IOException e) {
     }
