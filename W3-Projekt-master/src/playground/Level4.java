@@ -41,7 +41,7 @@ public class Level4 extends SpaceInvadersLevel {
       double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
     ObjectController zzController = new ZickZackController(gameTime, 0.5);
     return new AnimatedGameobject(name, this, zzController, x_enemy, y_enemy,
-            vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.1, alienImage);
+            vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.1, alienImage, showtime, startzeit, "loop");
   }
 
 

@@ -9,6 +9,7 @@ import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.AttributedString;
+import java.time.Instant;
 import java.util.LinkedList;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
@@ -65,6 +66,9 @@ public class SpaceInvadersLevel extends KeyboardControl {
   protected int				 totalFrames	= 3;
   protected boolean          lost           = false;
   protected boolean          doneLevel      = false;
+  protected long   			 startzeit;
+  protected double 			 showtime		= 0.1;
+  protected String[]		 abspielmodus 	= null;
 
 
   public SpaceInvadersLevel(int SIZEX, int SIZEY) {
@@ -125,7 +129,8 @@ public class SpaceInvadersLevel extends KeyboardControl {
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
           double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
       return new AnimatedGameobject(name, this, enemyController, x_enemy, y_enemy,
-              vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.1, alienImage);
+              vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 3, 
+              this.alienImage, showtime, startzeit, "loop");
   }
 
 
@@ -296,11 +301,13 @@ public class SpaceInvadersLevel extends KeyboardControl {
     this.alienImage = new BufferedImage[totalFrames];
     try {
     	for (int i = 0; i < alienImage.length; i++ ) {
-    		alienImage[i] = ImageIO.read(new File("./boredAlien" + i + ".png"));
+    		alienImage[i] = ImageIO.read(new File("./sweetAlien" + i + ".png"));
     	}
     } catch (IOException e) {
     }
-
+    // Zeitmessung starten
+    this.startzeit = System.nanoTime();
+    
   }
 
   /**
