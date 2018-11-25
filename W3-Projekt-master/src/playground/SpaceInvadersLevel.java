@@ -9,12 +9,8 @@ import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.AttributedString;
-import java.time.Instant;
 import java.util.LinkedList;
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 
 import controller.EnemyController;
 import controller.FallingStarController;
@@ -27,7 +23,6 @@ import gameobjects.FallingStar;
 import gameobjects.GameObject;
 import gameobjects.EgoObject;
 import gameobjects.TextObject;
-import sun.applet.Main;
 
 import java.util.Scanner;
 
@@ -131,7 +126,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
           double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
       return new AnimatedGameobject(name, this, enemyController, x_enemy, y_enemy,
-              vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.5, 
+              vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.4, 
               this.alienImage, showtime, startzeit, "loop");
   }
 

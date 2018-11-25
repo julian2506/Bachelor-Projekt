@@ -16,8 +16,9 @@ public class SimpleShot extends GameObject {
 
 	public File laser = null;
 	
-  public SimpleShot(String id, Playground pg, ObjectController o, double x, double y, double vx,
-      double vy) {
+  public SimpleShot(String id, Playground pg, ObjectController o, 
+		  double x, double y, double vx,
+		  double vy) {
     super(id, pg, o, x, y, vx, vy);
   
     this.laser = SpaceInvadersLevel.laser;
