@@ -67,8 +67,10 @@ public class SpaceInvadersLevel extends KeyboardControl {
   protected boolean          lost           = false;
   protected boolean          doneLevel      = false;
   protected long   			 startzeit;
-  protected double 			 showtime		= 0.05; //sekunden
+  protected double 			 showtime		= 0.01; //sekunden
   protected String[]		 abspielmodus 	= null;
+  public	File			 smash			= null;
+  public static	File		 laser			= null;
 
 
   public SpaceInvadersLevel(int SIZEX, int SIZEY) {
@@ -206,7 +208,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
     createExplosion(gameTime, e, "shard", DYING_INTERVAL, Color.RED) ;
     
     //JW: ton abspielen
-    Music.music("./smash.wav");
+    Music.music(smash);
 
     // spawn a bonus points object
     double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
@@ -308,6 +310,10 @@ public class SpaceInvadersLevel extends KeyboardControl {
     }
     // Zeitmessung starten
     this.startzeit = System.nanoTime();
+    
+    // Musik laden
+    this.smash = new File("./smash.wav");
+    this.laser = new File("./laser.wav");
     
   }
 
