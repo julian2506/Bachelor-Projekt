@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.AttributedString;
 import java.util.LinkedList;
+import java.util.Locale;
+
 import javax.imageio.ImageIO;
 
 import controller.EnemyController;
@@ -58,15 +60,17 @@ public class SpaceInvadersLevel extends KeyboardControl {
 
 
   protected BufferedImage[]  alienImage     = null;
-  protected int				 totalFrames	= 8;
+  protected double[]	 	 showTime; 		//sekunden
   protected boolean          lost           = false;
   protected boolean          doneLevel      = false;
   protected long   			 startzeit;
-  protected double 			 showtime		= 0.01; //sekunden
+  protected double	 		 showtime	= 0.01; //sekunden
   protected String[]		 abspielmodus 	= null;
   public	File			 smash			= null;
   public static	File		 laser			= null;
-
+  public 	String 			 dateiName		= null;
+  static LinkedList<String>  imageList		= null;
+  static LinkedList<Double>  showtimeList	= null;
 
   public SpaceInvadersLevel(int SIZEX, int SIZEY) {
     super(SIZEX, SIZEY);
@@ -127,7 +131,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
           double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
       return new AnimatedGameobject(name, this, enemyController, x_enemy, y_enemy,
               vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.4, 
-              this.alienImage, showtime, startzeit, "loop");
+              this.alienImage, this.showTime, startzeit, "loop");
   }
 
 
@@ -293,24 +297,94 @@ public class SpaceInvadersLevel extends KeyboardControl {
     setFlag("detailedStatus", "std");
     setFlag("egoLives", Integer.valueOf(5));
     setFlag("dying", Double.valueOf(-1));
-
-    // pre-load alien Image from disk
-    this.alienImage = new BufferedImage[totalFrames];
-    try {
-    	for (int i = 0; i < alienImage.length; i++ ) {
-    		alienImage[i] = ImageIO.read(new File("./sweetAlien" + i + ".png"));
-    		//System.out.println("filled");
-    	}
-    } catch (IOException e) {
-    }
+    
     // Zeitmessung starten
     this.startzeit = System.nanoTime();
     
     // Musik laden
     this.smash = new File("./smash.wav");
-    this.laser = new File("./laser.wav");
+    laser = new File("./laser.wav");
     
+    // Datei laden und in Liste speichern
+    imageList = new LinkedList<String>();
+    showtimeList = new LinkedList<Double>();
+    
+    this.dateiName = "sweet.txt"; 
+    ladeDatei(dateiName); 
+    
+    this.showTime = new double[showtimeList.size()];
+    for (int i = 0; i < showTime.length; i++ ) {
+		showTime[i] = showtimeList.get(i);
+		//System.out.println(showTime[i]);
+	}
+    
+    // Images anhand Liste in Array laden
+    this.alienImage = new BufferedImage[imageList.size()];
+    try {
+    	for (int i = 0; i < alienImage.length; i++ ) {
+    		alienImage[i] = ImageIO.read(new File(imageList.get(i)));
+    		//System.out.println("filled");
+    	}
+    } catch (IOException e) {
+    }
   }
+  
+  private void ladeDatei(String datName) { 
+	  
+	  Scanner scanner;
+          
+      try { 
+    	  scanner = new Scanner(new File(datName), "UTF-8"); 
+    	  
+    	  scanner.useLocale(Locale.GERMANY);
+  
+          String zeile; 
+          double zeit;
+          
+	          while (scanner.hasNext()) { 
+	        	  if (scanner.hasNextDouble()) {
+	        		  zeit = scanner.nextDouble();
+	        		  showtimeList.add(zeit);
+	        	  } else {
+	        		  zeile = scanner.next();
+	        		  imageList.add(zeile);
+	        	  }
+	          }
+          
+          scanner.close(); 
+          
+          } catch (FileNotFoundException e) { 
+              e.printStackTrace(); 
+          }
+  } 
+  
+  /*private static void ladeDatei(String datName) { 
+
+      File file = new File(datName); 
+
+      if (!file.canRead() || !file.isFile()) System.exit(0); 
+          
+      BufferedReader in = null; 
+          
+      try { 
+          in = new BufferedReader(new FileReader(datName)); 
+          String zeile = null; 
+          while ((zeile = in.readLine()) != null) { 
+        	  imageList.add(zeile);
+              System.out.println("Gelesene Zeile: " + zeile); 
+              
+          } 
+      } catch (IOException e) { 
+          e.printStackTrace(); 
+      } finally { 
+          if (in != null) 
+              try { 
+                  in.close(); 
+              } catch (IOException e) { 
+              } 
+      } 
+  } */
+
 
   /**
    * (re)draws the level but NOT the objects, they draw themselves. Called by the main game loop.
@@ -425,11 +499,11 @@ public class SpaceInvadersLevel extends KeyboardControl {
             actionIfEgoCollidesWithEnemy(e, s, gameTime);
             
             // JW: an welchen Koordianten wurde Player getroffen?
-            System.out.println("x-Koordinate von Player " + s.getX());
-            System.out.println("y-Koordinate von Player " + s.getY());
-            System.out.println("x-Koordinate von Enemy " + e.getX());
-            System.out.println("y-Koordinate von Enemy " + e.getY());
-            System.out.println("                        ");
+            //System.out.println("x-Koordinate von Player " + s.getX());
+            //System.out.println("y-Koordinate von Player " + s.getY());
+            //System.out.println("x-Koordinate von Enemy " + e.getX());
+            //System.out.println("y-Koordinate von Enemy " + e.getY());
+            //System.out.println("                        ");
 
             
           }

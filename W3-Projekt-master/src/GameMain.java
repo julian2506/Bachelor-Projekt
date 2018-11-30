@@ -44,6 +44,8 @@ public class GameMain {
 
   public static final int SIZEX = 700;
   public static final int SIZEY = 700;
+  
+  
 
   public static void main(String[] args) throws IOException {
     ArrayList<Playground> levels = new ArrayList<Playground>();
@@ -70,7 +72,7 @@ public class GameMain {
     	  
 
         // paint current state of level and measure time
-        long strt = System.nanoTime();
+    	long strt = System.nanoTime();
         gameUI.waitWhilePainting();
 
 
