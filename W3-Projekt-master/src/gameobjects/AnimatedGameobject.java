@@ -10,7 +10,8 @@ import playground.Playground;
 public class AnimatedGameobject extends GameObject{
 	
 	private BufferedImage[] imageArray;
-	double showtime = 0;
+	double showtime[];
+	int index = 0;
 	long zeit;
 	boolean loop = false;
 	boolean rueckwaerts = false;
@@ -24,7 +25,7 @@ public class AnimatedGameobject extends GameObject{
 	public AnimatedGameobject(String id, Playground pg, ObjectController o, 
 			double x, double y, double vx,
 		      double vy, double sizeX, double sizeY, double scale, BufferedImage[] imageArray, 
-		      double showtime, long zeit, String abspielmodus) {
+		      double[] showtime, long zeit, String abspielmodus) {
 		super(id, pg, o, x, y, vx, vy);
 		
 			this.imageArray = imageArray;
@@ -54,55 +55,60 @@ public class AnimatedGameobject extends GameObject{
 		
 		long elapsedTime = i2 - zeit;
 		
-		double seconds = (double)elapsedTime / 10000000000.0;
+		double seconds = (double)elapsedTime / 1000000000.0;
 		
-		if(loop) {
-			
-			if (loopFrame >= imageArray.length) loopFrame = 0;
-			
-			if (seconds >= showtime) {
-				g.drawImage(imageArray[loopFrame], (int) Math.round(x - rx), 
-						(int) Math.round(y - ry), (int) rx * 2,
-	    	  			(int) ry * 2, null);
-				loopFrame++;
-				zeit = System.nanoTime();
+			if(loop) {
 				
-			} else {
-				g.drawImage(imageArray[loopFrame], (int) Math.round(x - rx), 
-						(int) Math.round(y - ry), (int) rx * 2,
-	    	  			(int) ry * 2, null);
+				if (loopFrame >= imageArray.length) loopFrame = 0;
+				
+				if (seconds >= showtime[index]) {
+					g.drawImage(imageArray[loopFrame], (int) Math.round(x - rx), 
+							(int) Math.round(y - ry), (int) rx * 2,
+		    	  			(int) ry * 2, null);
+					loopFrame++;
+					zeit = System.nanoTime();
+					System.out.println(showtime[index]);
+					index++;
+					
+				} else {
+					g.drawImage(imageArray[loopFrame], (int) Math.round(x - rx), 
+							(int) Math.round(y - ry), (int) rx * 2,
+		    	  			(int) ry * 2, null);
+				}
 			}
-		}
-		
-		if (vorwaerts) {
 			
-			if (seconds >= showtime && forFrame < imageArray.length-1) {
-				g.drawImage(imageArray[forFrame], (int) Math.round(x - rx), 
-						(int) Math.round(y - ry), (int) rx * 2,
-	    	  			(int) ry * 2, null);
-				forFrame++;
-				zeit = System.nanoTime();
-			} else {
-				g.drawImage(imageArray[forFrame], (int) Math.round(x - rx), 
-						(int) Math.round(y - ry), (int) rx * 2,
-	    	  			(int) ry * 2, null);
+			if (vorwaerts) {
+				
+				if (seconds >= showtime[index] && forFrame < imageArray.length-1) {
+					g.drawImage(imageArray[forFrame], (int) Math.round(x - rx), 
+							(int) Math.round(y - ry), (int) rx * 2,
+		    	  			(int) ry * 2, null);
+					forFrame++;
+					zeit = System.nanoTime();
+					index++;
+				} else {
+					g.drawImage(imageArray[forFrame], (int) Math.round(x - rx), 
+							(int) Math.round(y - ry), (int) rx * 2,
+		    	  			(int) ry * 2, null);
+				}
+			} 
+			
+			if(rueckwaerts) {
+			
+				if (seconds >= showtime[index] && backFrame > 1) {
+					g.drawImage(imageArray[backFrame], (int) Math.round(x - rx), 
+							(int) Math.round(y - ry), (int) rx * 2,
+		    	  			(int) ry * 2, null);
+					backFrame--;
+					zeit = System.nanoTime();
+					index--;
+				} else {
+					g.drawImage(imageArray[backFrame], (int) Math.round(x - rx), 
+							(int) Math.round(y - ry), (int) rx * 2,
+		    	  			(int) ry * 2, null);
+				}
 			}
-		} 
 		
-		if(rueckwaerts) {
-		
-			if (seconds >= showtime && backFrame > 1) {
-				g.drawImage(imageArray[backFrame], (int) Math.round(x - rx), 
-						(int) Math.round(y - ry), (int) rx * 2,
-	    	  			(int) ry * 2, null);
-				backFrame--;
-				zeit = System.nanoTime();
-			} else {
-				g.drawImage(imageArray[backFrame], (int) Math.round(x - rx), 
-						(int) Math.round(y - ry), (int) rx * 2,
-	    	  			(int) ry * 2, null);
-			}
-		}
 		
 		/*if (currentFrame >= imageArray.length) currentFrame = 0;
 		
