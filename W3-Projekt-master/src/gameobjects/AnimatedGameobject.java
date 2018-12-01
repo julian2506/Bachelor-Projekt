@@ -60,6 +60,7 @@ public class AnimatedGameobject extends GameObject{
 			if(loop) {
 				
 				if (loopFrame >= imageArray.length) loopFrame = 0;
+				if (index >= showtime.length) index = 0;
 				
 				if (seconds >= showtime[index]) {
 					g.drawImage(imageArray[loopFrame], (int) Math.round(x - rx), 
