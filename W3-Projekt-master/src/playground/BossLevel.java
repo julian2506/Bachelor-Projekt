@@ -73,7 +73,7 @@ public class BossLevel extends SpaceInvadersLevel {
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
       double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
     return new AnimatedGameobject(name, this, enemyController, this.canvasX / 2, 10,
-            vx_enemy, 50, this.canvasX / 5, this.canvasY / 5, 0.1, alienImage);
+            vx_enemy, 50, this.canvasX / 5, this.canvasY / 5, 0.1, alienImage, showTime, startzeit, "loop");
   }
 
 

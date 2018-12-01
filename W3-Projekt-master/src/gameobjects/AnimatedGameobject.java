@@ -1,14 +1,7 @@
 package gameobjects;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.imageio.ImageIO;
 
 import controller.ObjectController;
 import playground.Playground;
@@ -17,41 +10,108 @@ import playground.Playground;
 public class AnimatedGameobject extends GameObject{
 	
 	private BufferedImage[] imageArray;
-	private int counter = 0;
-	int currentFrame = 0;
-	int second = 0;
+	double showtime[];
+	int index = 0;
+	long zeit;
+	boolean loop = false;
+	boolean rueckwaerts = false;
+	boolean vorwaerts = false;
 	
-	Timer timer = new Timer();
-	TimerTask task = new TimerTask() {
-		public void run() {
-			second++;
-		}	
-	};
+	int loopFrame = 0;
+	int backFrame = 7;
+	int forFrame = 0;
 
-	
+
 	public AnimatedGameobject(String id, Playground pg, ObjectController o, 
 			double x, double y, double vx,
-		      double vy, double sizeX, double sizeY, double scale, BufferedImage[] imageArray) {
+		      double vy, double sizeX, double sizeY, double scale, BufferedImage[] imageArray, 
+		      double[] showtime, long zeit, String abspielmodus) {
 		super(id, pg, o, x, y, vx, vy);
 		
 			this.imageArray = imageArray;
+			this.showtime = showtime;
+			this.zeit = zeit;
 			
-				for (int i = 0; i < imageArray.length; i++ ) {
-				    setRadiusMode(imageArray[i].getWidth() * scale);
-				    double radX = (int) (imageArray[i].getWidth() * scale);
-				    double radY = (int) (imageArray[i].getHeight() * scale);
-				    setRectangleMode(radX, radY) ;
-				    if (imageArray[i].getHeight() * scale > radius) {
-				      setRadiusMode(imageArray[i].getHeight() * scale);
-				    }
+			if(abspielmodus.equals("loop")) this.loop = true;
+			if(abspielmodus.equals("rueckwaerts")) this.rueckwaerts = true;
+			if(abspielmodus.equals("vorwaerts")) this.vorwaerts = true;
+			
+			for (int i = 0; i < imageArray.length; i++ ) {
+				setRadiusMode(imageArray[i].getWidth() * scale);
+				double radX = (int) (imageArray[i].getWidth() * scale);
+				double radY = (int) (imageArray[i].getHeight() * scale);
+				setRectangleMode(radX, radY) ;
+				if (imageArray[i].getHeight() * scale > radius) {
+				   setRadiusMode(imageArray[i].getHeight() * scale);
 				}
+			}
 	}
 
-		
 	public void draw(Graphics2D g) {
 	    //System.out.println("drawing"+this.getId());
 		
-		if (currentFrame >= imageArray.length) currentFrame = 0;
+		// Zeitmessung und Differenz der beiden messen
+		long i2 = System.nanoTime();
+		
+		long elapsedTime = i2 - zeit;
+		
+		double seconds = (double)elapsedTime / 1000000000.0;
+		
+			if(loop) {
+				
+				if (loopFrame >= imageArray.length) loopFrame = 0;
+				if (index >= showtime.length) index = 0;
+				
+				if (seconds >= showtime[index]) {
+					g.drawImage(imageArray[loopFrame], (int) Math.round(x - rx), 
+							(int) Math.round(y - ry), (int) rx * 2,
+		    	  			(int) ry * 2, null);
+					loopFrame++;
+					zeit = System.nanoTime();
+					System.out.println(showtime[index]);
+					index++;
+					
+				} else {
+					g.drawImage(imageArray[loopFrame], (int) Math.round(x - rx), 
+							(int) Math.round(y - ry), (int) rx * 2,
+		    	  			(int) ry * 2, null);
+				}
+			}
+			
+			if (vorwaerts) {
+				
+				if (seconds >= showtime[index] && forFrame < imageArray.length-1) {
+					g.drawImage(imageArray[forFrame], (int) Math.round(x - rx), 
+							(int) Math.round(y - ry), (int) rx * 2,
+		    	  			(int) ry * 2, null);
+					forFrame++;
+					zeit = System.nanoTime();
+					index++;
+				} else {
+					g.drawImage(imageArray[forFrame], (int) Math.round(x - rx), 
+							(int) Math.round(y - ry), (int) rx * 2,
+		    	  			(int) ry * 2, null);
+				}
+			} 
+			
+			if(rueckwaerts) {
+			
+				if (seconds >= showtime[index] && backFrame > 1) {
+					g.drawImage(imageArray[backFrame], (int) Math.round(x - rx), 
+							(int) Math.round(y - ry), (int) rx * 2,
+		    	  			(int) ry * 2, null);
+					backFrame--;
+					zeit = System.nanoTime();
+					index--;
+				} else {
+					g.drawImage(imageArray[backFrame], (int) Math.round(x - rx), 
+							(int) Math.round(y - ry), (int) rx * 2,
+		    	  			(int) ry * 2, null);
+				}
+			}
+		
+		
+		/*if (currentFrame >= imageArray.length) currentFrame = 0;
 		
 		if(counter >= 200) {
 			g.drawImage(imageArray[currentFrame], (int) Math.round(x - rx), 
@@ -66,34 +126,8 @@ public class AnimatedGameobject extends GameObject{
 					(int) Math.round(y - ry), (int) rx * 2,
     	  			(int) ry * 2, null);
 			counter++;
-		} 
-		
-		/*if(timer(2)) {
-		g.drawImage(imageArray[currentFrame], (int) Math.round(x - rx), (int) Math.round(y - ry), (int) rx * 2,
-	  			(int) ry * 2, null);
-	
-    	currentFrame++;
-    	//counter = 0;
-	}*/
+		} */
 
 	} 
-	/*public boolean timer(int vergleich){
-		
-		timer.scheduleAtFixedRate(task, 500, 1000);
-		
-		if (second == 2) {
-			second = 0;
-			return true;
-		}
-		else return false;
-		
-		long time = System.currentTimeMillis();
-		System.out.println(time);
-		
-		if((time - System.currentTimeMillis()) % 10 == vergleich) {
-			return true;
-			
-		}
-		else return false;
-	}*/
+
 }
