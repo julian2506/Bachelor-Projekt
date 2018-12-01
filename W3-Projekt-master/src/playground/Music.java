@@ -8,9 +8,9 @@ import javax.sound.sampled.Clip;
 
 public class Music {
 
-	 public static synchronized void music(String track) {
+	 public static synchronized void music(File track) {
 
-	  final String trackname = track;
+	  final File trackname = track;
 
 	  new Thread(new Runnable() {
 
@@ -21,7 +21,7 @@ public class Music {
 	     try {
 
 	      Clip clip = AudioSystem.getClip();
-	      AudioInputStream inputstream = AudioSystem.getAudioInputStream(new File(trackname));
+	      AudioInputStream inputstream = AudioSystem.getAudioInputStream(trackname);
 	      clip.open(inputstream);
 	      clip.loop(0);
 	     
