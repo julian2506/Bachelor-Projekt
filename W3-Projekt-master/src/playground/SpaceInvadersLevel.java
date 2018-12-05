@@ -26,6 +26,7 @@ import gameobjects.FallingStar;
 import gameobjects.GameObject;
 import gameobjects.EgoObject;
 import gameobjects.TextObject;
+import playground.CollisionDetector;
 
 import java.util.Scanner;
 
@@ -526,11 +527,9 @@ public class SpaceInvadersLevel extends KeyboardControl {
         // loop over enemies to check for collisions or suchlike ...
         LinkedList<GameObject> shots = collectObjects("simpleShot", true);
         for (GameObject e : enemies) {
-
          // if ego collides with enemy..
-          if (s.getDistance(e) < 0) {
-        	// JW: Kollision von Player mit Enemy
-        	// if (Collision.EnemyHitsPlayer(s.getX(), s.getY(), 1, e.getX(), e.getY(), 2, 2)) {
+        	if(CollisionDetector.CollisionDetection(s, e)) {
+          //if (s.getDistance(e) < 0) {
             actionIfEgoCollidesWithEnemy(e, s, gameTime);
             
             // JW: an welchen Koordianten wurde Player getroffen?
@@ -554,7 +553,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
 
         // loop over enemies and, with a certain probability, launch an enemy shot for each one
         for (GameObject e : enemies) {
-          createEnemyShot(e, gameTime);
+          //createEnemyShot(e, gameTime);
         }
 
         // check for collisions between ego object and enemy shots
