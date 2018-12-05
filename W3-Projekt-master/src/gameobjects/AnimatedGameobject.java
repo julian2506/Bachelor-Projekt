@@ -68,7 +68,7 @@ public class AnimatedGameobject extends GameObject{
 		    	  			(int) ry * 2, null);
 					loopFrame++;
 					zeit = System.nanoTime();
-					System.out.println(showtime[index]);
+					//System.out.println(showtime[index]);
 					index++;
 					
 				} else {
