@@ -41,7 +41,7 @@ public abstract class GameObject {
   protected double ry = -1;
   protected BufferedImage mask = null;
   protected boolean active = true;
-  protected int collisionMode = GameObject.RADIUS;
+  public int collisionMode = GameObject.RADIUS;
 
   private ObjectController controller = null;
 
