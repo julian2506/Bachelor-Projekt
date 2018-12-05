@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import controller.EnemyController;
 import controller.FallingStarController;
 import controller.LimitedTimeController;
+import controller.MineController;
 import controller.ObjectController;
 import controller.EgoController;
 import gameobjects.AnimatedGameobject;
@@ -51,6 +52,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
   public static final int    NRSHARDS       = 50;
   public static final double EXPL_DURATION  = 1.;
   public static final int    NR_ENEMIES     = 30;
+  public static final int    NR_COLLECT     = 5;
   public static final Color  EXPL_COLOR     = Color.RED;
   public static final double SHARDSPEED     = 400;
   public static final double STARSPEED      = 200;
@@ -58,9 +60,6 @@ public class SpaceInvadersLevel extends KeyboardControl {
   public static final double STARTPERIOD    = 5.;
   public static final double DYING_INTERVAL = 2.0 ;
 
-
-  protected BufferedImage[]  alienImage     = null;
-  protected double[]	 	 showTime; 		//sekunden
   protected boolean          lost           = false;
   protected boolean          doneLevel      = false;
   protected long   			 startzeit;
@@ -68,9 +67,12 @@ public class SpaceInvadersLevel extends KeyboardControl {
   protected String[]		 abspielmodus 	= null;
   public	File			 smash			= null;
   public static	File		 laser			= null;
-  public 	String 			 dateiName		= null;
-  static LinkedList<String>  imageList		= null;
-  static LinkedList<Double>  showtimeList	= null;
+  
+  public BufferedImage[]	 alienImage     = null;
+  public double[]	 	 	 alienshowTime	= null;
+  
+  public BufferedImage[]  	 heartImage     = null;
+  public double[]	 	 	 heartshowTime	= null;
 
   public SpaceInvadersLevel(int SIZEX, int SIZEY) {
     super(SIZEX, SIZEY);
@@ -116,11 +118,16 @@ public class SpaceInvadersLevel extends KeyboardControl {
   protected int calcNrEnemies() {
     return NR_ENEMIES ;
   }
+  
+  protected int calcNrCollect() {
+	return NR_COLLECT ;
+  }
 
 
   ObjectController createEnemyController() {
     return new EnemyController() ;
   }
+  
 
   protected String getStartupMessage() {
     return "Get ready for level X!" ;
@@ -131,7 +138,14 @@ public class SpaceInvadersLevel extends KeyboardControl {
           double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
       return new AnimatedGameobject(name, this, enemyController, x_enemy, y_enemy,
               vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.4, 
-              this.alienImage, this.showTime, startzeit, "loop");
+              this.alienImage, this.alienshowTime, startzeit, "loop");
+  }
+  
+  protected GameObject createSingleCollect(String name, double x_collect, double y_collect,
+          double vx_collect, double vy_collect, ObjectController collectController, double gameTime) {
+      return new AnimatedGameobject(name, this, collectController, x_collect, y_collect,
+              vx_collect, vy_collect, this.canvasX / 10, this.canvasY / 10, 0.1, 
+              this.heartImage, this.heartshowTime, startzeit, "loop");
   }
 
 
@@ -152,6 +166,24 @@ public class SpaceInvadersLevel extends KeyboardControl {
       addObject(enemy);
     }
   }
+  
+  protected void createCollectables(double gameTime) {
+	    // create collectables
+	    double cspeedx = this.calcEnemySpeedX() ;
+	    double cspeedy = this.calcEnemySpeedY() ;
+	    for (int i = 0; i < this.calcNrCollect(); i++) {
+	      double x_collect = Math.random() * this.canvasX;
+	      double y_collect = Math.random() * this.canvasY / 3;
+	      double vx_collect = 2 * (Math.random() - 0.5) * 0;
+	      double vy_collect = Math.random() * cspeedy;
+
+	      ObjectController collectController = createEnemyController();
+
+	      GameObject collect = createSingleCollect("collect"+i, x_collect, y_collect,
+	          vx_collect, vy_collect, collectController, gameTime) ;
+	      addObject(collect);
+	    }
+	  }
 
 
   protected void createEgoObject() {
@@ -232,6 +264,35 @@ public class SpaceInvadersLevel extends KeyboardControl {
     
   }
   
+  void actionIfCollect(GameObject e, GameObject shot, double gameTime) {
+	    createExplosion(gameTime, e, "shard", DYING_INTERVAL, Color.RED) ;
+	    
+	    //JW: ton abspielen
+	    Music.music(smash);
+
+	    // spawn a bonus points object
+	    double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
+	    double vy = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVY();
+
+	    LimitedTimeController bonusTextController =
+	        new LimitedTimeController(gameTime, SpaceInvadersLevel.EXPL_DURATION);
+	    TextObject bonusText = new TextObject("bonus" + e.getId(), this, bonusTextController,
+	        e.getX(), e.getY(), vx, vy, "200!", 20).setTextColor(Color.YELLOW);
+
+	    addObject(bonusText);
+
+	    // delete enemy
+	    deleteObject(e.getId());
+	    
+	    // delete shot
+	    deleteObject(shot.getId()) ;
+
+	    // add to points counter
+	    Integer pts = (Integer) getFlag("points");
+	    setFlag("points", pts + 200);
+	    
+	  }
+  
   
   void actionIfEgoCollidesWithEnemy(GameObject e, GameObject ego, double gameTime){
     // set temporary text over ego
@@ -305,85 +366,58 @@ public class SpaceInvadersLevel extends KeyboardControl {
     this.smash = new File("./smash.wav");
     laser = new File("./laser.wav");
     
+    //----- Alien
     // Datei laden und in Liste speichern
-    imageList = new LinkedList<String>();
-    showtimeList = new LinkedList<Double>();
+    LinkedList<String>  alienList = new LinkedList<String>();
+    LinkedList<Double>  alienTimeList = new LinkedList<Double>();
     
-    this.dateiName = "sweet.txt"; 
-    ladeDatei(dateiName); 
+    String dateiName = "sweetAlien.txt"; 
+    LadeDatei alien = new LadeDatei(dateiName, alienList, alienTimeList); 
+    alien.getImagelist(alienList);
+    alien.getShowtimelist(alienTimeList);
     
-    this.showTime = new double[showtimeList.size()];
-    for (int i = 0; i < showTime.length; i++ ) {
-		showTime[i] = showtimeList.get(i);
+    this.alienshowTime = new double[alienTimeList.size()];
+    for (int i = 0; i < alienshowTime.length; i++ ) {
+    	this.alienshowTime[i] = alienTimeList.get(i);
 		//System.out.println(showTime[i]);
 	}
     
     // Images anhand Liste in Array laden
-    this.alienImage = new BufferedImage[imageList.size()];
+    this.alienImage = new BufferedImage[alienList.size()];
     try {
     	for (int i = 0; i < alienImage.length; i++ ) {
-    		alienImage[i] = ImageIO.read(new File(imageList.get(i)));
+    		this.alienImage[i] = ImageIO.read(new File(alienList.get(i)));
+    		//System.out.println("filled");
+    	}
+    } catch (IOException e) {
+    }
+    
+    //-----Heart
+    // Datei laden und in Liste speichern
+    LinkedList <String> heartList = new LinkedList<String>();
+    LinkedList <Double> heartTimeList = new LinkedList<Double>();
+    
+    String heartName = "heart.txt"; 
+    LadeDatei herz = new LadeDatei(heartName, heartList, heartTimeList); 
+    herz.getImagelist(heartList);
+    herz.getShowtimelist(heartTimeList);
+    
+    this.heartshowTime = new double[heartTimeList.size()];
+    for (int i = 0; i < this.heartshowTime.length; i++ ) {
+    	this.heartshowTime[i] = heartTimeList.get(i);
+		//System.out.println(showTime[i]);
+	}
+    
+    // Images anhand Liste in Array laden
+    this.heartImage = new BufferedImage[heartList.size()];
+    try {
+    	for (int i = 0; i < this.heartImage.length; i++ ) {
+    		this.heartImage[i] = ImageIO.read(new File(heartList.get(i)));
     		//System.out.println("filled");
     	}
     } catch (IOException e) {
     }
   }
-  
-  private void ladeDatei(String datName) { 
-	  
-	  Scanner scanner;
-          
-      try { 
-    	  scanner = new Scanner(new File(datName), "UTF-8"); 
-    	  
-    	  scanner.useLocale(Locale.GERMANY);
-  
-          String zeile; 
-          double zeit;
-          
-	          while (scanner.hasNext()) { 
-	        	  if (scanner.hasNextDouble()) {
-	        		  zeit = scanner.nextDouble();
-	        		  showtimeList.add(zeit);
-	        	  } else {
-	        		  zeile = scanner.next();
-	        		  imageList.add(zeile);
-	        	  }
-	          }
-          
-          scanner.close(); 
-          
-          } catch (FileNotFoundException e) { 
-              e.printStackTrace(); 
-          }
-  } 
-  
-  /*private static void ladeDatei(String datName) { 
-
-      File file = new File(datName); 
-
-      if (!file.canRead() || !file.isFile()) System.exit(0); 
-          
-      BufferedReader in = null; 
-          
-      try { 
-          in = new BufferedReader(new FileReader(datName)); 
-          String zeile = null; 
-          while ((zeile = in.readLine()) != null) { 
-        	  imageList.add(zeile);
-              System.out.println("Gelesene Zeile: " + zeile); 
-              
-          } 
-      } catch (IOException e) { 
-          e.printStackTrace(); 
-      } finally { 
-          if (in != null) 
-              try { 
-                  in.close(); 
-              } catch (IOException e) { 
-              } 
-      } 
-  } */
 
 
   /**
@@ -473,6 +507,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
     } else if (gameStatus.equals("init") == true) {
 
       this.createEnemies(gameTime);
+      this.createCollectables(gameTime);
 
       setFlag("gameStatus", "playing");
 
