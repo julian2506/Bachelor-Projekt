@@ -109,24 +109,6 @@ public class AnimatedGameobject extends GameObject{
 		    	  			(int) ry * 2, null);
 				}
 			}
-		
-		
-		/*if (currentFrame >= imageArray.length) currentFrame = 0;
-		
-		if(counter >= 200) {
-			g.drawImage(imageArray[currentFrame], (int) Math.round(x - rx), 
-					(int) Math.round(y - ry), (int) rx * 2,
-    	  			(int) ry * 2, null);
-	    	currentFrame++;
-	    	counter = 0;
-		} else {
-			// zeigt currentFrame weiterhin an waehrend counter hochzaehlt 
-			// bis neues Frame angezeigt wird
-			g.drawImage(imageArray[currentFrame], (int) Math.round(x - rx), 
-					(int) Math.round(y - ry), (int) rx * 2,
-    	  			(int) ry * 2, null);
-			counter++;
-		} */
 
 	} 
 
