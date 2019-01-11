@@ -170,7 +170,6 @@ public class SpaceInvadersLevel extends KeyboardControl {
   
   protected void createCollectables(double gameTime) {
 	    // create collectables
-	    double cspeedx = this.calcEnemySpeedX() ;
 	    double cspeedy = this.calcEnemySpeedY() ;
 	    for (int i = 0; i < this.calcNrCollect(); i++) {
 	      double x_collect = Math.random() * this.canvasX;
@@ -265,11 +264,11 @@ public class SpaceInvadersLevel extends KeyboardControl {
     
   }
   
-  void actionIfCollect(GameObject e, GameObject shot, double gameTime) {
-	    createExplosion(gameTime, e, "shard", DYING_INTERVAL, Color.RED) ;
+ void actionIfCollect(GameObject e, GameObject shot, double gameTime) {
+	    //createExplosion(gameTime, e, "shard", DYING_INTERVAL, Color.RED) ;
 	    
 	    //JW: ton abspielen
-	    Music.music(smash);
+	    //Music.music(smash);
 
 	    // spawn a bonus points object
 	    double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
@@ -277,10 +276,10 @@ public class SpaceInvadersLevel extends KeyboardControl {
 
 	    LimitedTimeController bonusTextController =
 	        new LimitedTimeController(gameTime, SpaceInvadersLevel.EXPL_DURATION);
-	    TextObject bonusText = new TextObject("bonus" + e.getId(), this, bonusTextController,
-	        e.getX(), e.getY(), vx, vy, "200!", 20).setTextColor(Color.YELLOW);
+	    //TextObject bonusText = new TextObject("bonus" + e.getId(), this, bonusTextController,
+	        //e.getX(), e.getY(), vx, vy, "Level up!", 20).setTextColor(Color.YELLOW);
 
-	    addObject(bonusText);
+	    //addObject(bonusText);
 
 	    // delete enemy
 	    deleteObject(e.getId());
@@ -289,11 +288,32 @@ public class SpaceInvadersLevel extends KeyboardControl {
 	    deleteObject(shot.getId()) ;
 
 	    // add to points counter
-	    Integer pts = (Integer) getFlag("points");
-	    setFlag("points", pts + 200);
-	    
+	    Integer lives = (Integer) getFlag("egoLives") ;
+	    lives++ ;
+	    setFlag ("egoLives",lives) ;
 	  }
   
+  void actionIfEgoCollidesWithCollect(GameObject e, GameObject ego, double gameTime){
+
+	    /*double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
+	    double vy = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVY();
+
+	    LimitedTimeController levelTextController =
+	        new LimitedTimeController(gameTime, SpaceInvadersLevel.EXPL_DURATION);
+	    TextObject bonusText = new TextObject("levelup" + e.getId(), this, levelTextController,
+	       e.getX(), e.getY(), vx, vy, "Level up!", 20).setTextColor(Color.YELLOW);
+
+	    addObject(bonusText);*/
+	    
+	    // delete collect
+	    deleteObject(e.getId());
+
+	    // add to points counter
+	    Integer lives = (Integer) getFlag("egoLives") ;
+	    lives++ ;
+	    setFlag ("egoLives",lives); 
+	    
+	  }
   
   void actionIfEgoCollidesWithEnemy(GameObject e, GameObject ego, double gameTime){
     // set temporary text over ego
@@ -524,8 +544,12 @@ public class SpaceInvadersLevel extends KeyboardControl {
       GameObject s = this.getObject("ego");
 
       if (subStatus.equals("std")) {
+    	  
+    	
+          
         // check for collisions of enemy and shots, reuse shots list from before..
         LinkedList<GameObject> enemies = collectObjects("enemy", false);
+        
 
         // check whether all enemies have been destroyed or escaped
         if (enemies.size() == 0) {
@@ -540,6 +564,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
           //if (s.getDistance(e) < 0) {
             actionIfEgoCollidesWithEnemy(e, s, gameTime);
             
+            
             // JW: an welchen Koordinaten wurde Player getroffen?
             //System.out.println("x-Koordinate von Player " + s.getX());
             //System.out.println("y-Koordinate von Player " + s.getY());
@@ -550,6 +575,17 @@ public class SpaceInvadersLevel extends KeyboardControl {
             
           }
         
+        	
+         // Wenn Herzen einsammeln
+          LinkedList<GameObject> collects = collectObjects("collect", false);
+          for (GameObject c : collects) {
+
+              if (s.getDistance(c) < 0) {
+            	  actionIfEgoCollidesWithCollect(c, s, gameTime) ;
+                }
+
+              }
+        	
           // if short collides with enemy
           for (GameObject shot : shots) {
           
@@ -573,6 +609,8 @@ public class SpaceInvadersLevel extends KeyboardControl {
           }
 
         }
+        
+        
       } // if substatus.. 
       else if (subStatus.equals("dying")) {
         Double t0 = (Double)getFlag("t0") ;
