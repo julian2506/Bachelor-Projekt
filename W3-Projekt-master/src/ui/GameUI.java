@@ -15,7 +15,7 @@ import javax.swing.WindowConstants;
 import playground.Playground;
 import java.awt.event.* ;
 
-public class GameUI implements ActionListener {
+public class GameUI {
 
   private JFrame frame = null;
   private JPanel panel = null;
@@ -27,7 +27,8 @@ public class GameUI implements ActionListener {
   JMenuItem aboutItem ;
   JMenu gameMenu ;
   JMenu helpMenu ;
-  JButton button ;
+  JButton neustart ;
+  JButton beenden ;
 
   public GameUI(int sizeX, int sizeY) {
 
@@ -45,7 +46,7 @@ public class GameUI implements ActionListener {
     frame.setContentPane(panel);
     
     // menuleiste erzeugen und hinzufügen!
-    this.loadItem = new JMenuItem("Restore game");
+   /* this.loadItem = new JMenuItem("Restore game");
     this.saveItem = new JMenuItem("Save game");    
     this.quitItem = new JMenuItem("Exit game");
     this.loadItem.addActionListener(this); 
@@ -68,9 +69,9 @@ public class GameUI implements ActionListener {
     
     frame.setJMenuBar(mb);
     
-    this.button = new JButton("BUTTON!!") ;
-    this.button.addActionListener(this);
-    this.panel.add(this.button);
+    this.neustart = new JButton("Spiel neu starten!") ;
+    this.neustart.addActionListener(this);
+    this.panel.add(this.neustart);*/
 
     // showtime!
     frame.pack();
@@ -89,6 +90,7 @@ public class GameUI implements ActionListener {
 
   public void setPlayground(Playground pg) {
     canvas.setPlayground(pg);
+    
   }
 
   public boolean isPainting() {
@@ -116,8 +118,8 @@ public class GameUI implements ActionListener {
       System.exit(0); 
     } else if (ae.getSource() == this.aboutItem) {
       System.out.println("about");
-    } else if (ae.getSource() == this.button) {
-      System.out.println("click");
+    } else if (ae.getSource() == this.neustart) {
+      System.out.println("Spiel wurde neu gestartet");
     } else if (ae.getSource() == this.saveItem) {
       System.out.println("save");
     } else if (ae.getSource() == this.loadItem) {

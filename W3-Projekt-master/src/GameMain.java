@@ -24,6 +24,7 @@ import playground.Playground;
 import playground.SpaceInvadersLevel;
 import playground.SpaceInvadersLevel.DateiHandler;
 import ui.GameUI;
+import ui.Menu;
 
 /**
  * Main class starting any game, contains main(). Apart from that, this class manages all
@@ -53,13 +54,14 @@ public class GameMain {
     //levels.add(new BonusLevel(SIZEX, SIZEY));
     levels.add(new Level1(SIZEX, SIZEY));
     
-    
+    new Menu();
     GameUI gameUI = new GameUI(SIZEX, SIZEY);
 
     double gameTime = -1;
     Playground playground = null;
 
     for (int levelIndex = 0; levelIndex < levels.size(); levelIndex++) {
+    	new Menu();
       playground = levels.get(levelIndex);
       playground.prepareLevel("2");
       gameUI.setPlayground(playground);
