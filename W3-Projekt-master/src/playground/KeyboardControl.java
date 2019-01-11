@@ -23,8 +23,8 @@ import gameobjects.SimpleShot;
  */
 public abstract class KeyboardControl extends Playground {
 
-  public static final int CANVASX = 700;
-  public static final int CANVASY = 700;
+  public static final int CANVASX = 1700;
+  public static final int CANVASY = 1700;
   public static final double SHOTSPEED = 350;
   public static final double EGOSPEED = 400;
 
@@ -81,9 +81,15 @@ public abstract class KeyboardControl extends Playground {
 
     if (keys.getOrDefault(KeyEvent.VK_ENTER, 0) == 2) {
       togglePause();
-      // System.out.println("PAUSE");
+      System.out.println("Das Spiel wurde pausiert.");
       keys.remove(KeyEvent.VK_ENTER);
     }
+    
+    if (keys.getOrDefault(KeyEvent.VK_ESCAPE, 0) == 2) {
+        System.exit(0);
+        System.out.println("Das Spiel wurde beendet.");
+        keys.remove(KeyEvent.VK_ESCAPE);
+      }
 
     if (keys.getOrDefault(KeyEvent.VK_SPACE, 0) == 2) {
       addObject(new SimpleShot("simpleShot" + nextShot++, this, new SimpleShotController(),

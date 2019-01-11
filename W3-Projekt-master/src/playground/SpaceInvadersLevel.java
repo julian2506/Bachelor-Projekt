@@ -486,6 +486,14 @@ public class SpaceInvadersLevel extends KeyboardControl {
     as3.addAttribute(TextAttribute.FOREGROUND, Color.yellow);
     g2.drawString(as3.getIterator(), 10, 40);
     
+    if(isPaused()) {
+        Font drawFont4 = new Font("SansSerif", Font.PLAIN, 50);
+        AttributedString as4 = new AttributedString("Das Spiel wurde pausiert.");
+        as4.addAttribute(TextAttribute.FONT, drawFont4);
+        as4.addAttribute(TextAttribute.FOREGROUND, Color.red);
+        g2.drawString(as4.getIterator(), 30, 400);
+    }
+    
     // JW: Highscore aktualisieren
     File f = new File("./highscore.txt");
     DateiHandler dh = new DateiHandler(f);
@@ -555,6 +563,15 @@ public class SpaceInvadersLevel extends KeyboardControl {
         	if(CollisionDetector.CollisionDetection(s, e)) {
           //if (s.getDistance(e) < 0) {
             actionIfEgoCollidesWithEnemy(e, s, gameTime);
+            
+            
+            // JW: an welchen Koordinaten wurde Player getroffen?
+            //System.out.println("x-Koordinate von Player " + s.getX());
+            //System.out.println("y-Koordinate von Player " + s.getY());
+            //System.out.println("x-Koordinate von Enemy " + e.getX());
+            //System.out.println("y-Koordinate von Enemy " + e.getY());
+            //System.out.println("                        ");
+
             
           }
         
