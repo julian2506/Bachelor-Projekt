@@ -7,6 +7,7 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+import collider.Collider;
 import controller.ObjectController;
 import playground.Music;
 import playground.Playground;
@@ -24,7 +25,6 @@ public class SimpleShot extends GameObject {
     this.laser = SpaceInvadersLevel.laser;
 
     setRectangleMode(3,10);
-    Music.music(laser);
 
   }
 

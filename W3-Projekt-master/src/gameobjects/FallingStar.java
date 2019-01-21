@@ -2,6 +2,8 @@ package gameobjects;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+
+import collider.Collider;
 import controller.ObjectController;
 import playground.Playground;
 

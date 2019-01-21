@@ -2,6 +2,8 @@ package gameobjects;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+
+import collider.Collider;
 import controller.ObjectController;
 import playground.Playground;
 
@@ -31,7 +33,7 @@ public abstract class GameObject {
   public static final int RECTANGLE = 1;
   public static final int MASK = 2;
 
-  protected String id = null;
+  public  String id = null;
   protected double x = 0;
   protected double vx = 0;
   protected double y = 0;
@@ -44,9 +46,11 @@ public abstract class GameObject {
   public int collisionMode = GameObject.RADIUS;
 
   private ObjectController controller = null;
+  private Collider col = null;
 
-  public GameObject(String id, Playground playground, ObjectController controller, double x,
-      double y, double vx, double vy) {
+  public GameObject(String id, Playground playground, 
+		  ObjectController controller, double x,
+		  double y, double vx, double vy, Collider col) {
     setX(x);
     setY(y);
     setVX(vx);
@@ -55,6 +59,22 @@ public abstract class GameObject {
     this.controller = controller;
     this.controller.setObject(this);
     this.controller.setPlayground(playground);
+    this.col = col;
+    this.col.setObject(this);
+    this.col.setController(controller);
+    this.col.setPlayground(playground);
+  }
+  
+  public GameObject(String id, Playground playground, ObjectController controller, double x,
+	double y, double vx, double vy) {
+	setX(x);
+	setY(y);
+	setVX(vx);
+	setVY(vy);
+	this.id = id;
+	this.controller = controller;
+	this.controller.setObject(this);
+	this.controller.setPlayground(playground);
   }
 
   public GameObject setRadiusMode(double r) {
@@ -90,6 +110,7 @@ public abstract class GameObject {
 
   public void updateObject(double gameTime) {
     controller.updateObject(gameTime);
+    //col.updateObject(gameTime);
   }
 
   public boolean isActive() {

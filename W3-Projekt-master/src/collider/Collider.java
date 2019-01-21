@@ -1,38 +1,52 @@
-package playground;
-
-
-import java.util.LinkedList;
-import java.util.Timer;
-import java.util.TimerTask;
+package collider;
 
 import gameobjects.GameObject;
-import gameobjects.AnimatedGameobject;
 import playground.Playground;
 
-public class CollisionDetector {
-	
-    GameObject s = null;
-    GameObject enemies = null;
-	
-	boolean kollidiert = false;	
-	
-	public static boolean CollisionDetection(GameObject s, GameObject e) {
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.LinkedList;
 
+import controller.ObjectController;
+import gameobjects.AnimatedGameobject;
+
+public abstract class Collider {
+	
+	protected double x = 0;
+	protected double vx = 0;
+	protected double y = 0;
+	protected double vy = 0;
+	protected double radX = 0;
+	protected double radY = 0;
+	public String id = null;
+	
+	protected double width;
+	protected double height;
+	
+	protected GameObject gameobject = null;
+	protected Playground playground = null;
+	protected ObjectController controller = null;
+	
+	protected boolean active = true;
+	
+	public Collider (String id, Playground playground, ObjectController controller, double x,
+		      double y, double vx, double vy) {
 		
-				if (s.collisionMode == GameObject.RECTANGLE && e.collisionMode==GameObject.RECTANGLE) {
-					if(checkCollisionRectRect(s.getX(), s.getY(), AnimatedGameobject.radXRec, AnimatedGameobject.radYRec, e.getX(), e.getY(), AnimatedGameobject.radXRec, AnimatedGameobject.radYRec)) return true;
-				}
-				else if ((s.collisionMode == GameObject.RADIUS && e.collisionMode==GameObject.RECTANGLE) || 
-					(s.collisionMode == GameObject.RECTANGLE && e.collisionMode==GameObject.RADIUS)) {
-					if(checkCollisionRectCirc(s.getX(), s.getY(), s.getRadius(), e.getX(), e.getY(), AnimatedGameobject.radXRec, AnimatedGameobject.radYRec)) return true;
-				}
-				else if ((s.collisionMode == GameObject.RADIUS && e.collisionMode==GameObject.RADIUS)) {
-					//System.out.println("Es funktioniert.");
-					if(checkCollisionCircCirc(s.getX(), s.getY(), s.getRadius(), e.getX(), e.getY(), e.getRadius())) return true;
-				}
-			 
-		return false;
-		}
+		this.x = x;
+		this.y = y;
+		this.vx = vx;
+		this.vy = vy;
+		
+		this.id = id;
+		this.controller = controller;
+		this.playground = playground;
+		
+		this.width = 100;
+		this.height = 200;
+		
+		//System.out.println("collider erstellt");
+	}
 	
 	
 	public static boolean checkCollisionRectRect(double rx1, double ry1, double rw1, double rh1, double rx2, double ry2, double rw2, double rh2) {	
@@ -85,6 +99,44 @@ public class CollisionDetector {
 			}
 			return false;
 	}
+
+	
+	
+
+
+	public String getId() {
+		return id;
+	}
+
+
+	public boolean isActive() {
+	    return active;
+	  }
+
+	public void setObject(GameObject gameObject) {
+	    this.gameobject = gameObject;
+	}
+
+	public void setController(ObjectController controller) {
+		this.controller = controller;
+	}
+
+
+	public void setPlayground(Playground playground) {
+		this.playground = playground;
+	}
+
+	public abstract boolean CollidesWith(Collider other);
+	
+	public abstract void updateObject(double gameTime);
+
+	public abstract void draw(Graphics2D g);
+	
+	public void applySpeedVector() {
+	    double ts = playground.getTimestep();
+	    gameobject.setX(gameobject.getX() + gameobject.getVX() * ts);
+	    gameobject.setY(gameobject.getY() + gameobject.getVY() * ts);
+	  }
 
 
 }
