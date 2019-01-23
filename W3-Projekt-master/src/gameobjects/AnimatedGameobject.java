@@ -6,6 +6,10 @@ import java.awt.image.BufferedImage;
 import controller.ObjectController;
 import playground.Playground;
 
+import collider.Collider;
+import collider.RectCollider;
+import collider.CircleCollider;
+
 
 public class AnimatedGameobject extends GameObject{
 	
@@ -20,13 +24,16 @@ public class AnimatedGameobject extends GameObject{
 	int loopFrame = 0;
 	int backFrame = 7;
 	int forFrame = 0;
-
+	
+	public static double radCirc = 0;
+	public static double radXRec = 0;
+	public static double radYRec = 0;
 
 	public AnimatedGameobject(String id, Playground pg, ObjectController o, 
 			double x, double y, double vx,
 		      double vy, double sizeX, double sizeY, double scale, BufferedImage[] imageArray, 
-		      double[] showtime, long zeit, String abspielmodus) {
-		super(id, pg, o, x, y, vx, vy);
+		      double[] showtime, long zeit, String abspielmodus, Collider col) {
+		super(id, pg, o, x, y, vx, vy, col);
 		
 			this.imageArray = imageArray;
 			this.showtime = showtime;
@@ -36,13 +43,20 @@ public class AnimatedGameobject extends GameObject{
 			if(abspielmodus.equals("rueckwaerts")) this.rueckwaerts = true;
 			if(abspielmodus.equals("vorwaerts")) this.vorwaerts = true;
 			
-			for (int i = 0; i < imageArray.length; i++ ) {
-				setRadiusMode(imageArray[i].getWidth() * scale);
-				double radX = (int) (imageArray[i].getWidth() * scale);
-				double radY = (int) (imageArray[i].getHeight() * scale);
-				setRectangleMode(radX, radY) ;
-				if (imageArray[i].getHeight() * scale > radius) {
-				   setRadiusMode(imageArray[i].getHeight() * scale);
+			for (int i = 0; i < imageArray.length; i++ ) { 
+				radXRec = (imageArray[i].getWidth() * scale);
+				radYRec = (imageArray[i].getHeight() * scale);
+				
+				if (imageArray[i].getHeight() == imageArray[i].getWidth()) {
+					radCirc = imageArray[i].getWidth() * scale;
+					setRadiusMode(radCirc);
+					//new CircCollider(x, y, radXRec, radYRec, imageArray[i], vx, vy);
+				}
+				else {
+					radXRec = (imageArray[i].getWidth() * scale);
+					radYRec = (imageArray[i].getHeight() * scale);
+					setRectangleMode(radXRec, radYRec) ;
+					//new RectCollider(id, x, y, radXRec, radYRec, vx, vy);
 				}
 			}
 	}

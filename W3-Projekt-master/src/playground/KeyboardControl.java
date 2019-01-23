@@ -2,6 +2,8 @@ package playground;
 
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+
+import collider.RectCollider;
 import controller.EgoController;
 import controller.FallingStarController;
 import controller.SimpleShotController;
