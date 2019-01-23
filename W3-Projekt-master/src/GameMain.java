@@ -19,6 +19,7 @@ import playground.BossLevel;
 import playground.MonsterLevel;
 import playground.HitTwiceLevel;
 import playground.BonusLevel;
+import playground.KeyboardControl;
 
 import playground.Playground;
 import playground.SpaceInvadersLevel;
@@ -50,33 +51,60 @@ public class GameMain {
 
   public static void main(String[] args) throws IOException {
     ArrayList<Playground> levels = new ArrayList<Playground>();
-    //levels.add(new BossLevel(SIZEX, SIZEY));
-    //levels.add(new BonusLevel(SIZEX, SIZEY));
     levels.add(new Level1(SIZEX, SIZEY));
+    levels.add(new Level2(SIZEX, SIZEY));
+    levels.add(new Level3(SIZEX, SIZEY));
     
-    new Menu();
     GameUI gameUI = new GameUI(SIZEX, SIZEY);
 
     double gameTime = -1;
     Playground playground = null;
 
+    
     for (int levelIndex = 0; levelIndex < levels.size(); levelIndex++) {
-    	new Menu();
       playground = levels.get(levelIndex);
       playground.prepareLevel("2");
+      
+      while (GameUI.buttonPressed != 1) {
+      System.out.println(GameUI.buttonPressed);
       gameUI.setPlayground(playground);
+      }
+
       // System.out.println("LEVEL" + levelIndex);
 
       gameTime = 0;
 
+      
       while ((playground.levelFinished() || playground.gameOver()) == false) {
+    	 
+    	  if ((GameUI.buttonPressed == 1) || (KeyboardControl.keyInput == 1)) {
+    		  //Spiel neu starten
+    		  gameUI.setPlayground(playground);
+    		  //playground.reset();
+    		  gameUI.setPlayground(playground);
+
+    	  }
     	  
+    	  if (GameUI.buttonPressed == 2) {
+    		  //oeffne about
+    	  }
+    	  
+    	  if (GameUI.buttonPressed == 3) {
+    		  //Event wenn Button gedrückt wurde
+    	  }
+    	  
+    	  if (GameUI.buttonPressed == 4) {
+    		  //speichere Spielzustand
+    	  } 
+    	  
+    	  if (GameUI.buttonPressed == 5) {
+    		  //lade Spielzustand
+    	  } 
     	  
 
         // paint current state of level and measure time
     	long strt = System.nanoTime();
         gameUI.waitWhilePainting();
-
 
         // calc real timstep in ms
         long nd = System.nanoTime();
