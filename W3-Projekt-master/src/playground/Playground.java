@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
+import collider.Collider;
 import controller.LevelController;
 import gameobjects.GameObject;
 
@@ -28,6 +30,7 @@ public abstract class Playground {
   protected int canvasX = -1;
   protected int canvasY = -1;
   protected HashMap<String, GameObject> gameObjects = null;
+  //protected HashMap<String, Collider> collider = null;
   protected static HashMap<String, Object> flags = null;
   protected String level = "";
   protected double timeStep = 0;
@@ -38,6 +41,7 @@ public abstract class Playground {
 
   public Playground(int sizeX, int sizeY) {
     gameObjects = new HashMap<String, GameObject>();
+    //collider = new HashMap<String, Collider>();
     flags = new HashMap<String, Object>();
     this.canvasX = sizeX;
     this.canvasY = sizeY;
@@ -88,6 +92,25 @@ public abstract class Playground {
     }
     return l;
   };
+  
+  /*LinkedList<Collider> collectCollider(String substr, boolean filterInactive) {
+	    LinkedList<Collider> c = new LinkedList<Collider>();
+	    for (Map.Entry<String, Collider> entry : this.collider.entrySet()) {
+	    	System.out.println("colliderliste gefuellt");
+	      Collider obj = entry.getValue();
+	      if (obj.getId().contains(substr)) {
+	        if (filterInactive == true) {
+	          if (obj.isActive()) {
+	            c.add(obj);
+	          }
+	        } else {
+	          c.add(obj);
+	        }
+	      }
+	    }
+	    
+	    return c;
+	  };*/
 
 
 
@@ -198,7 +221,7 @@ public abstract class Playground {
         gameObject.updateObject(gameTime);
       }
     }
-
+    
     for (GameObject o : addables) {
       addObjectNow(o);
     }

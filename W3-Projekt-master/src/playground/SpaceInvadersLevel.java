@@ -14,6 +14,9 @@ import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
+import collider.CircleCollider;
+import collider.Collider;
+import collider.RectCollider;
 import controller.EnemyController;
 import controller.FallingStarController;
 import controller.LimitedTimeController;
@@ -74,6 +77,11 @@ public class SpaceInvadersLevel extends KeyboardControl {
   
   public BufferedImage[]  	 heartImage     = null;
   public double[]	 	 	 heartshowTime	= null;
+  
+  LinkedList<Collider> enemyCols = new LinkedList<Collider>();
+  LinkedList<Collider> collectCols = new LinkedList<Collider>();
+  
+  public Collider egoCol = null;
 
   public SpaceInvadersLevel(int SIZEX, int SIZEY) {
     super(SIZEX, SIZEY);
@@ -129,6 +137,17 @@ public class SpaceInvadersLevel extends KeyboardControl {
     return new EnemyController() ;
   }
   
+  Collider createRectColl(String id, Playground playground, 
+		  ObjectController controller, double x,
+	      double y, double vx, double vy) { 
+	return new RectCollider(id, playground, controller, x, y, vx, vy);
+  }
+  
+  Collider createCircColl(String id, Playground playground, ObjectController controller, double x,
+	      double y, double vx, double vy) { 
+	return new CircleCollider(id, playground, controller, x, y, vx, vy);
+  }
+  
 
   protected String getStartupMessage() {
     return "Get ready for level X!" ;
@@ -136,17 +155,17 @@ public class SpaceInvadersLevel extends KeyboardControl {
 
 
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
-          double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
+          double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime, Collider col) {
       return new AnimatedGameobject(name, this, enemyController, x_enemy, y_enemy,
               vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.4, 
-              this.alienImage, this.alienshowTime, startzeit, "loop");
+              this.alienImage, this.alienshowTime, startzeit, "loop", col);
   }
   
   protected GameObject createSingleCollect(String name, double x_collect, double y_collect,
-          double vx_collect, double vy_collect, ObjectController collectController, double gameTime) {
+          double vx_collect, double vy_collect, ObjectController collectController, double gameTime, Collider col) {
       return new AnimatedGameobject(name, this, collectController, x_collect, y_collect,
               vx_collect, vy_collect, this.canvasX / 10, this.canvasY / 10, 0.1, 
-              this.heartImage, this.heartshowTime, startzeit, "loop");
+              this.heartImage, this.heartshowTime, startzeit, "loop", col );
   }
 
 
@@ -161,9 +180,14 @@ public class SpaceInvadersLevel extends KeyboardControl {
       double vy_enemy = Math.random() * speedy;
 
       ObjectController enemyController = createEnemyController();
+      
+      Collider rectCol = createRectColl("col_enemy"+i, this, 
+    		  enemyController, x_enemy, y_enemy, vx_enemy, vy_enemy);
+      enemyCols.add(rectCol);
 
-      GameObject enemy = createSingleEnemy("enemy"+i, x_enemy, y_enemy,
-          vx_enemy, vy_enemy, enemyController, gameTime) ;
+      GameObject enemy = createSingleEnemy("enemy"+i, x_enemy, 
+    		  y_enemy, vx_enemy, vy_enemy, enemyController, 
+    		  gameTime, rectCol) ;
       addObject(enemy);
     }
   }
@@ -178,9 +202,13 @@ public class SpaceInvadersLevel extends KeyboardControl {
 	      double vy_collect = Math.random() * cspeedy;
 
 	      ObjectController collectController = createEnemyController();
+	      
+	      Collider rectCol1 = createRectColl("col_collect"+i, this, collectController, x_collect,
+			      y_collect, vx_collect, vy_collect);
+	      collectCols.add(rectCol1);
 
 	      GameObject collect = createSingleCollect("collect"+i, x_collect, y_collect,
-	          vx_collect, vy_collect, collectController, gameTime) ;
+	          vx_collect, vy_collect, collectController, gameTime, rectCol1) ;
 	      addObject(collect);
 	    }
 	  }
@@ -189,7 +217,8 @@ public class SpaceInvadersLevel extends KeyboardControl {
   protected void createEgoObject() {
     // add ego to playground at lower bottom
     EgoController egoController = new EgoController();
-    EgoObject ego = new EgoObject("ego", this, egoController, 50, canvasY - 60, 0, 0);
+    this.egoCol = new RectCollider("egoCol", this, egoController, 50, canvasY - 60, 0, 0);
+    EgoObject ego = new EgoObject("ego", this, egoController, 50, canvasY - 60, 0, 0, egoCol );
     addObject(ego);
   }
 
@@ -199,7 +228,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
     for (int i = 1; i <= LEVEL2STARS; i++) {
       FallingStarController fallingStartController = new FallingStarController();
       FallingStar star = new FallingStar("star" + i, this, fallingStartController,
-          Math.random() * canvasX, Math.random() * 15, 0.0, Math.random() * STARSPEED);
+          Math.random() * canvasX, Math.random() * 15, 0.0, Math.random() * STARSPEED, null);
       addObject(star);
     }
   }
@@ -318,9 +347,9 @@ public class SpaceInvadersLevel extends KeyboardControl {
   void actionIfEgoCollidesWithEnemy(GameObject e, GameObject ego, double gameTime){
     // set temporary text over ego
     if (getObject("AUA" + e.getId()) == null) {
-      addObject(new TextObject("AUA" + e.getId(), this,
+      /*addObject(new TextObject("AUA" + e.getId(), this,
           new LimitedTimeController(gameTime, BONUS_DURATION), ego.getX(), ego.getY() - 20,
-          ego.getVX(), ego.getVY(), "AUAA!!", 10));
+          ego.getVX(), ego.getVY(), "AUAA!!", 10));*/
 
       
       // deduct points
@@ -330,6 +359,21 @@ public class SpaceInvadersLevel extends KeyboardControl {
     
   }
   
+  
+  void actionIfColliderCollides(Collider e, Collider ego, double gameTime){
+	    // set temporary text over ego
+	    if (getObject("AUA" + e.getId()) == null) {
+	      /*addObject(new TextObject("AUA" + e.getId(), this,
+	          new LimitedTimeController(gameTime, BONUS_DURATION), ego.getX(), ego.getY() - 20,
+	          ego.getVX(), ego.getVY(), "AUAA!!", 10));*/
+
+	      
+	      // deduct points
+	      Integer pts = (Integer) getFlag("points");
+	      setFlag("points", pts - 500);
+	    }
+	    
+	  }
   
   protected void actionIfEgoObjectIsHit(GameObject eshot, GameObject ego, double gameTime) {
     //System.out.println("collision of " + eshot.getId() + " and " + ego.getId());
@@ -544,13 +588,10 @@ public class SpaceInvadersLevel extends KeyboardControl {
       GameObject s = this.getObject("ego");
 
       if (subStatus.equals("std")) {
-    	  
-    	
           
-        // check for collisions of enemy and shots, reuse shots list from before..
+    	// check for collisions of enemy and shots, reuse shots list from before..
         LinkedList<GameObject> enemies = collectObjects("enemy", false);
-        
-
+      
         // check whether all enemies have been destroyed or escaped
         if (enemies.size() == 0) {
           this.doneLevel = true;
@@ -561,8 +602,8 @@ public class SpaceInvadersLevel extends KeyboardControl {
         for (GameObject e : enemies) {
          // if ego collides with enemy..
         	if(CollisionDetector.CollisionDetection(s, e)) {
-          //if (s.getDistance(e) < 0) {
-            actionIfEgoCollidesWithEnemy(e, s, gameTime);
+        	//if(s.getDistance(e) < 0) {
+            //actionIfEgoCollidesWithEnemy(e, s, gameTime);
             
             
             // JW: an welchen Koordinaten wurde Player getroffen?
@@ -576,16 +617,6 @@ public class SpaceInvadersLevel extends KeyboardControl {
           }
         
         	
-         // Wenn Herzen einsammeln
-          LinkedList<GameObject> collects = collectObjects("collect", false);
-          for (GameObject c : collects) {
-
-              if (s.getDistance(c) < 0) {
-            	  actionIfEgoCollidesWithCollect(c, s, gameTime) ;
-                }
-
-              }
-        	
           // if short collides with enemy
           for (GameObject shot : shots) {
           
@@ -594,6 +625,27 @@ public class SpaceInvadersLevel extends KeyboardControl {
             }
           }
         }
+    
+        // wenn Collider sich schneiden
+        // Problem: nur Kollisonen erkannt, Positionsveränderungen 
+        // der GO werden nicht richtig übernommen
+        
+        for (Collider ec : enemyCols) {
+            if (egoCol.CollidesWith(ec)) {
+          	  	actionIfColliderCollides(ec, egoCol, gameTime) ;
+            }
+
+        }
+       	
+        // Wenn Herzen einsammeln
+         LinkedList<GameObject> collects = collectObjects("collect", false);
+         for (GameObject c : collects) {
+             if (CollisionDetector.CollisionDetection(s, c)) {
+           	  actionIfEgoCollidesWithCollect(c, s, gameTime) ;
+             }
+
+         }
+     
 
         // loop over enemies and, with a certain probability, launch an enemy shot for each one
         for (GameObject e : enemies) {

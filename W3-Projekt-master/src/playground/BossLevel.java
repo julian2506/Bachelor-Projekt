@@ -1,6 +1,8 @@
 package playground;
 
 import java.awt.Color;
+
+import collider.Collider;
 import controller.EgoController;
 import controller.FallingStarController;
 import controller.ObjectController;
@@ -71,9 +73,9 @@ public class BossLevel extends SpaceInvadersLevel {
 
   @Override
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
-      double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime) {
+      double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime, Collider col) {
     return new AnimatedGameobject(name, this, enemyController, this.canvasX / 2, 10,
-            vx_enemy, 50, this.canvasX / 5, this.canvasY / 5, 0.1, alienImage, alienshowTime, startzeit, "loop");
+            vx_enemy, 50, this.canvasX / 5, this.canvasY / 5, 0.1, alienImage, alienshowTime, startzeit, "loop", col);
   }
 
 

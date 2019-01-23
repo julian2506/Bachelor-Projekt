@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextAttribute;
 import java.text.AttributedString;
+
+import collider.Collider;
 import controller.ObjectController;
 import playground.Playground;
 
