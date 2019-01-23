@@ -17,28 +17,35 @@ public class CollisionDetector {
 	
 	public static boolean CollisionDetection(GameObject s, GameObject e) {
 
-		 LinkedList<GameObject> listGameObjects1 = new LinkedList<GameObject>();
-		 LinkedList<GameObject> listGameObjects2 = new LinkedList<GameObject>();
+		 //LinkedList<GameObject> listGameObjects1 = new LinkedList<GameObject>();
+		 //LinkedList<GameObject> listGameObjects2 = new LinkedList<GameObject>();
 		 
-		 listGameObjects1.add(s);
-		 listGameObjects2.add(e);
+		 //listGameObjects1.add(s);
+		 //listGameObjects2.add(e);
+		 
+		 //System.out.println(s.collisionMode);
+		 //System.out.println(e.collisionMode);
 
-		 for(int i=0; i<listGameObjects1.size(); i++) {
-			 for (int j=0; j<listGameObjects2.size();j++) {
+
+		 //for(int i=0; i<listGameObjects1.size(); i++) {
+			 //for (int j=0; j<listGameObjects2.size();j++) {
+				 
+				 s.collisionMode = 1;
+				 e.collisionMode = 1;
 		
 				if (s.collisionMode == GameObject.RECTANGLE && e.collisionMode==GameObject.RECTANGLE) {
 					if(checkCollisionRectRect(s.getX(), s.getY(), 20, 10, e.getX(), e.getY(), 20, 10)) return true;
 				}
-				else if ((s.collisionMode == GameObject.RADIUS && e.collisionMode==GameObject.RECTANGLE) || 
+				/*if ((s.collisionMode == GameObject.RADIUS && e.collisionMode==GameObject.RECTANGLE) || 
 					 (s.collisionMode == GameObject.RECTANGLE && e.collisionMode==GameObject.RADIUS)) {
-					//if(checkCollisionRectCirc(s.getX(), s.getY(), s.getRadius(), e.getX(), e.getY(), 20, 20)) return true;
-				}
-				else if ((s.collisionMode == GameObject.RADIUS && e.collisionMode==GameObject.RADIUS)) {
+					if(checkCollisionRectCirc(s.getX(), s.getY(), s.getRadius(), e.getX(), e.getY(), 20, 20)) return true;
+				} */
+				/*else if ((s.collisionMode == GameObject.RADIUS && e.collisionMode==GameObject.RADIUS)) {
 					//System.out.println("Es funktioniert.");
 					if(checkCollisionCircCirc(s.getX(), s.getY(), s.getRadius(), e.getX(), e.getY(), e.getRadius())) return true;
-				}
-			 }
-		 }
+				}*/
+			 //}
+		 //}
 		return false;
 		}
 	
