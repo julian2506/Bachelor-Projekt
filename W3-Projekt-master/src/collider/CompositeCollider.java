@@ -26,10 +26,6 @@ public class CompositeCollider extends Collider {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public void updateObject(double gameTime) {
-		// TODO Auto-generated method stub
-	}
 
 	@Override
 	public boolean CollidesWith(Collider other) {

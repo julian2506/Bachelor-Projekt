@@ -12,8 +12,8 @@ public class FallingStar extends GameObject {
   private Color color = Color.WHITE;
 
   public FallingStar(String id, Playground playground, ObjectController controller, double x,
-      double y, double vx, double vy) {
-    super(id, playground, controller, x, y, vx, vy);
+      double y, double vx, double vy, Collider col) {
+    super(id, playground, controller, x, y, vx, vy, col);
     setRadiusMode(3);
   }
 

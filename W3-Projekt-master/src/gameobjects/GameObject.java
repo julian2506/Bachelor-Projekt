@@ -99,6 +99,38 @@ public abstract class GameObject {
     this.mask = mask;
     return this;
   }
+  
+  public boolean collidesWith(GameObject other) {
+	if (this.col.id == "rectCol" && other.col.id == "rectCol") {
+	  if (Collider.checkCollisionRectRect(this.col.x, this.col.y, this.col.width, this.col.height, 
+			  other.col.x, other.col.y, other.col.width, other.col.height)) {
+		  return true;
+	  }
+	} 
+	else if ((this.col.id == "rectCol" && other.col.id == "circCol") || 
+			 (this.col.id == "circCol" && other.col.id == "rectCol")) {
+	  if (Collider.checkCollisionRectCirc(this.col.x, this.col.y, this.radius, 
+			  other.col.x, other.col.y, 10, 20)) {
+		  return true;	  
+	  }
+	}
+	else if (this.col.id == "circCol" && other.col.id == "circCol") {
+	  if (Collider.checkCollisionCircCirc(this.col.x, this.col.y, this.radius, 
+			  other.col.x, other.col.y, other.radius)) return true;	  		  
+	} 
+	else if ((this.col.id == "compCol" && other.col.id == "circCol") || 
+			 (this.col.id == "circCol" && other.col.id == "compCol")) {
+	    
+	}
+	else if ((this.col.id == "compCol" && other.col.id == "rectCol") || 
+			 (this.col.id == "rectCol" && other.col.id == "compCol")) {
+	    
+	}
+	else if (this.col.id == "compCol" && other.col.id == "compCol") {
+	    
+	}
+	return false;
+  }
 
 
   public double getDistance(GameObject other) {
@@ -110,7 +142,12 @@ public abstract class GameObject {
 
   public void updateObject(double gameTime) {
     controller.updateObject(gameTime);
-    //col.updateObject(gameTime);
+    
+    // ueberpruefen, ob GameObject einen 
+    // Collider hat und diesen updaten
+    if (col != null) {
+  	  col.updateCol(gameTime);
+  	}
   }
 
   public boolean isActive() {
@@ -129,6 +166,19 @@ public abstract class GameObject {
 
   public double getRadius() {
     return radius;
+  }
+  
+  public void setWidthAndHeight(double rx, double ry) {
+    this.rx = rx;
+    this.ry = ry;
+  }
+  
+  public double getWidth() {
+	return rx;
+  }
+  
+  public double getHeight() {
+	return ry;
   }
 
   /**
@@ -228,6 +278,10 @@ public abstract class GameObject {
   public void setObjectController(ObjectController controller) {
     this.controller = controller;
   }
+  
+  public void setCollider(Collider collider) {
+	    this.col = collider;
+  }
 
   /**
    * Draws the object in its current state. Is called by the game engine, should NOT be called by
@@ -236,4 +290,5 @@ public abstract class GameObject {
    * @param g Graphics2D object that has all the necessary drawing functionalities
    */
   public abstract void draw(Graphics2D g);
+  
 }
