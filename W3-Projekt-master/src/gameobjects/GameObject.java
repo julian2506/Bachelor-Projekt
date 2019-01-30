@@ -102,7 +102,6 @@ public abstract class GameObject {
   }
   
   public boolean collisionDetection(GameObject other) {
-	  System.out.println("Check");
 	  if(this.col.CollidesWith(other.col.scol)) {
 		 //System.out.println("Check");
 		 return true;
