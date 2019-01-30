@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import collider.Collider;
+import collider.CompositeCollider;
 import controller.ObjectController;
 import playground.Playground;
 
@@ -100,35 +101,13 @@ public abstract class GameObject {
     return this;
   }
   
-  public boolean collidesWith(GameObject other) {
-	if (this.col.id == "rectCol" && other.col.id == "rectCol") {
-	  if (Collider.checkCollisionRectRect(this.col.x, this.col.y, this.col.width, this.col.height, 
-			  other.col.x, other.col.y, other.col.width, other.col.height)) {
-		  return true;
-	  }
-	} 
-	else if ((this.col.id == "rectCol" && other.col.id == "circCol") || 
-			 (this.col.id == "circCol" && other.col.id == "rectCol")) {
-	  if (Collider.checkCollisionRectCirc(this.col.x, this.col.y, this.radius, 
-			  other.col.x, other.col.y, 10, 20)) {
-		  return true;	  
-	  }
-	}
-	else if (this.col.id == "circCol" && other.col.id == "circCol") {
-	  if (Collider.checkCollisionCircCirc(this.col.x, this.col.y, this.radius, 
-			  other.col.x, other.col.y, other.radius)) return true;	  		  
-	} 
-	else if ((this.col.id == "compCol" && other.col.id == "circCol") || 
-			 (this.col.id == "circCol" && other.col.id == "compCol")) {
-	    
-	}
-	else if ((this.col.id == "compCol" && other.col.id == "rectCol") || 
-			 (this.col.id == "rectCol" && other.col.id == "compCol")) {
-	    
-	}
-	else if (this.col.id == "compCol" && other.col.id == "compCol") {
-	    
-	}
+  public boolean collisionDetection(GameObject other) {
+	  System.out.println("Check");
+	  if(this.col.CollidesWith(other.col.scol)) {
+		 //System.out.println("Check");
+		 return true;
+	 }
+
 	return false;
   }
 

@@ -101,7 +101,7 @@ public abstract class KeyboardControl extends Playground {
       SimpleShotController simpleshot = new SimpleShotController();
       addObject(new SimpleShot("simpleShot" + nextShot++, this, 
     		  simpleshot,
-          ego.getX(), ego.getY(), 0, -1. * SHOTSPEED, new RectCollider("rectCol", this, simpleshot)));
+          ego.getX(), ego.getY(), 0, -1. * SHOTSPEED));
       keys.remove(KeyEvent.VK_SPACE);
       keys.remove(KeyEvent.VK_P);
     }
