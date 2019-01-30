@@ -24,10 +24,6 @@ public class AnimatedGameobject extends GameObject{
 	int loopFrame = 0;
 	int backFrame = 7;
 	int forFrame = 0;
-	
-	public static double radCirc = 0;
-	public static double radXRec = 0;
-	public static double radYRec = 0;
 
 	public AnimatedGameobject(String id, Playground pg, ObjectController o, 
 			double x, double y, double vx,
@@ -35,30 +31,24 @@ public class AnimatedGameobject extends GameObject{
 		      double[] showtime, long zeit, String abspielmodus, Collider col) {
 		super(id, pg, o, x, y, vx, vy, col);
 		
-			this.imageArray = imageArray;
-			this.showtime = showtime;
-			this.zeit = zeit;
+		this.imageArray = imageArray;
+		this.showtime = showtime;
+		this.zeit = zeit;
 			
-			if(abspielmodus.equals("loop")) this.loop = true;
-			if(abspielmodus.equals("rueckwaerts")) this.rueckwaerts = true;
-			if(abspielmodus.equals("vorwaerts")) this.vorwaerts = true;
+		if(abspielmodus.equals("loop")) this.loop = true;
+		if(abspielmodus.equals("rueckwaerts")) this.rueckwaerts = true;
+		if(abspielmodus.equals("vorwaerts")) this.vorwaerts = true;
 			
-			for (int i = 0; i < imageArray.length; i++ ) { 
-				radXRec = (imageArray[i].getWidth() * scale);
-				radYRec = (imageArray[i].getHeight() * scale);
+		for (int i = 0; i < imageArray.length; i++ ) { 
 				
-				if (imageArray[i].getHeight() == imageArray[i].getWidth()) {
-					radCirc = imageArray[i].getWidth() * scale;
-					setRadiusMode(radCirc);
-					//new CircCollider(x, y, radXRec, radYRec, imageArray[i], vx, vy);
-				}
-				else {
-					radXRec = (imageArray[i].getWidth() * scale);
-					radYRec = (imageArray[i].getHeight() * scale);
-					setRectangleMode(radXRec, radYRec) ;
-					//new RectCollider(id, x, y, radXRec, radYRec, vx, vy);
-				}
+			// Radius festlegen
+			if (imageArray[i].getHeight() == imageArray[i].getWidth()) {
+				setRadius(imageArray[i].getWidth() * scale);
 			}
+			else { // Hoehe und Breite festlegen
+				setWidthAndHeight(imageArray[i].getWidth() * scale, imageArray[i].getHeight() * scale);
+			}
+		}
 	}
 
 	public void draw(Graphics2D g) {

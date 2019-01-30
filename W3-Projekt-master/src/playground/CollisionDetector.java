@@ -20,11 +20,11 @@ public class CollisionDetector {
 
 		
 				if (s.collisionMode == GameObject.RECTANGLE && e.collisionMode==GameObject.RECTANGLE) {
-					if(checkCollisionRectRect(s.getX(), s.getY(), AnimatedGameobject.radXRec, AnimatedGameobject.radYRec, e.getX(), e.getY(), AnimatedGameobject.radXRec, AnimatedGameobject.radYRec)) return true;
+					if(checkCollisionRectRect(s.getX(), s.getY(), 10, 20, e.getX(), e.getY(), 10, 20)) return true;
 				}
 				else if ((s.collisionMode == GameObject.RADIUS && e.collisionMode==GameObject.RECTANGLE) || 
 					(s.collisionMode == GameObject.RECTANGLE && e.collisionMode==GameObject.RADIUS)) {
-					if(checkCollisionRectCirc(s.getX(), s.getY(), s.getRadius(), e.getX(), e.getY(), AnimatedGameobject.radXRec, AnimatedGameobject.radYRec)) return true;
+					if(checkCollisionRectCirc(s.getX(), s.getY(), s.getRadius(), e.getX(), e.getY(), 10, 20)) return true;
 				}
 				else if ((s.collisionMode == GameObject.RADIUS && e.collisionMode==GameObject.RADIUS)) {
 					//System.out.println("Es funktioniert.");
