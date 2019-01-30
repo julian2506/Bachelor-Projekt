@@ -10,15 +10,15 @@ public class CompositeCollider extends Collider {
 	
 	
 	// neue Liste erzeugen, in der Collider gespeichert werden
-	LinkedList<Collider> sc = new LinkedList<Collider>();
+	//scol = new LinkedList<Collider>();
 
-	public CompositeCollider(String id, Playground playground, ObjectController controller, double x,
-		    double y, double vx, double vy, Collider col) {
+	public CompositeCollider(String id, Playground playground, ObjectController controller, 
+			LinkedList<Collider> sc) {
 		
-		super(id, playground, controller, x, y, vx, vy);
+		super(id, playground, controller);
+		this.scol = sc;
 		
 		//Collider an Liste übergeben
-		sc.add(col);
 	}
 
 	@Override
@@ -26,26 +26,60 @@ public class CompositeCollider extends Collider {
 		// TODO Auto-generated method stub
 	}
 
-
 	@Override
-	public boolean CollidesWith(Collider other) {
-
-		for (Collider sc : this.sc) {
-			if ((sc.id == "rectCol" && other.id == "circCol") || (sc.id == "circCol" && other.id == "rectCol")) {
-				if (Collider.checkCollisionRectCirc(sc.x, sc.y, sc.radX, other.x, other.y, other.radX, other.radY)) {
+	public boolean CollidesWith(LinkedList<Collider> other) {
+		//System.out.println("Check");
+		for (Collider sc : other) {
+			
+			if (this.id == "rectCol" && sc.id == "circCol") {
+				if (Collider.checkCollisionCircRect(sc.x, sc.y, sc.width/2, this.x, this.y, this.width, this.height)) {
 					return true;
 				}
 			}
-			if (sc.id == "circCol" && other.id == "circCol") {
-				if (Collider.checkCollisionCircCirc(sc.x, sc.y, sc.radX, other.x, other.y, other.radX)) {
+			if (this.id == "circCol" && sc.id == "rectCol") {
+				if (Collider.checkCollisionCircRect(this.x, this.y, this.width, sc.x, sc.y, sc.width, sc.height)) {
 					return true;
 				}
 			}
-			if (sc.id == "rectCol" && other.id == "rectCol") {
-				if (Collider.checkCollisionRectRect(sc.x, sc.y, sc.width, sc.height, other.x, other.y, other.width,
-						other.height)) {
+			if (this.id == "rectCol" && sc.id == "rectCol") {
+				if (Collider.checkCollisionRectRect(this.x, this.y, this.width, this.height, sc.x, sc.y, sc.width, sc.height)) {
 					return true;
 				}
+			}
+			if (this.id == "circCol" && sc.id == "circCol") {
+				if (Collider.checkCollisionCircCirc(this.x, this.y, this.width, sc.x, sc.y, sc.width)) {
+					return true;
+				}
+			}
+			if (this.id == "compCol" && sc.id == "circCol") {
+				for (Collider s : this.scol) {
+					if (s.id == "rectCol" && sc.id == "circCol") {
+						if (Collider.checkCollisionCircRect(sc.x, sc.y, sc.width/2, s.x, s.y, s.width, s.height)) {
+							return true;
+						}
+					}	
+					if (s.id == "circCol" && sc.id == "circCol") {
+						if (Collider.checkCollisionCircCirc(s.x, s.y, s.width, sc.x, sc.y, sc.width)) {
+							return true;
+						}
+					}
+				}
+			}
+			if (this.id == "compCol" && sc.id == "rectCol") {
+				for (Collider s : this.scol) {
+					if (s.id == "rectCol" && sc.id == "rectCol") {
+						if (Collider.checkCollisionRectRect(s.x, s.y, s.width, s.height, sc.x, sc.y, sc.width, sc.height)) {
+							return true;
+						}
+					}
+					
+					if (s.id == "circCol" && sc.id == "rectCol") {
+						if (Collider.checkCollisionCircRect(s.x, s.y, s.width, sc.x, sc.y, sc.width, sc.height)) {
+							return true;
+						}
+					}
+				}
+				
 			}
 		}
 		return false;
