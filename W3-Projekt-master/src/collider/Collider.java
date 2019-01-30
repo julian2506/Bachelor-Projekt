@@ -1,12 +1,15 @@
 package collider;
 
 import java.awt.Graphics2D;
+import java.util.LinkedList;
+
 import gameobjects.GameObject;
 import playground.Playground;
 import controller.ObjectController;
 
 public abstract class Collider {
 	
+
 	public double x = 0;
 	protected double vx = 0;
 	public double y = 0;
@@ -24,6 +27,7 @@ public abstract class Collider {
 	protected ObjectController controller = null;
 	
 	protected boolean active = true;
+	public LinkedList<Collider> scol;
 	
 	public Collider (String id, Playground playground, ObjectController controller) {
 		
@@ -48,7 +52,7 @@ public abstract class Collider {
 			return false;
 	}
 	
-	public static boolean checkCollisionRectCirc(double cx, double cy, double cr, double rx, double ry, double rw, double rh) {
+	public static boolean checkCollisionCircRect(double cx, double cy, double cr, double rx, double ry, double rw, double rh) {
 		double circleDistX = Math.abs(cx - (rx + rw/2));
 		double circleDistY = Math.abs(cy - (ry + rw/2));
 			
@@ -114,7 +118,7 @@ public abstract class Collider {
 		this.y = gameobject.getY();
 		this.vx = gameobject.getVX();
 		this.vy = gameobject.getVY();
-		if (this.id == "rect") {
+		if (this.id == "rectCol") {
 			this.width = gameobject.getWidth();
 			this.height = gameobject.getHeight();
 		} else {
@@ -124,5 +128,7 @@ public abstract class Collider {
 	}
 
 	public abstract void draw(Graphics2D g);
+	
+	public abstract boolean CollidesWith(LinkedList<Collider> other);
 
 }

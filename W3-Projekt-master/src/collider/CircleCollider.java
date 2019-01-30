@@ -1,6 +1,7 @@
 package collider;
 
 import java.awt.Graphics2D;
+import java.util.LinkedList;
 
 import controller.ObjectController;
 import playground.Playground;
@@ -17,6 +18,13 @@ public class CircleCollider extends Collider {
 	public void draw(Graphics2D g) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public boolean CollidesWith(LinkedList<Collider> other) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

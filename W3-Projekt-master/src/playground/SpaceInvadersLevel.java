@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 
 import collider.CircleCollider;
 import collider.Collider;
+import collider.CompositeCollider;
 import collider.RectCollider;
 import controller.EnemyController;
 import controller.FallingStarController;
@@ -175,12 +176,19 @@ public class SpaceInvadersLevel extends KeyboardControl {
 
       ObjectController enemyController = createEnemyController();
       
+      LinkedList<Collider> enemycol = new LinkedList<Collider>();
+      
       Collider rectCol = createRectColl("rectCol", this, 
     		  enemyController);
+      
+      enemycol.add(rectCol);
+      
+      Collider compcol = new CompositeCollider("compCol", this, 
+    		  enemyController, enemycol);
 
       GameObject enemy = createSingleEnemy("enemy"+i, x_enemy, 
     		  y_enemy, vx_enemy, vy_enemy, enemyController, 
-    		  gameTime, rectCol) ;
+    		  gameTime, compcol) ;
       
       
       
@@ -579,24 +587,22 @@ public class SpaceInvadersLevel extends KeyboardControl {
         LinkedList<GameObject> shots = collectObjects("simpleShot", true);
         for (GameObject e : enemies) {
          // if ego collides with enemy..
-          if (s.collidesWith(e)) {
+          if (s.collisionDetection(e)) {
             actionIfEgoCollidesWithEnemy(e, s, gameTime) ;
           }
         	
           // if shot collides with enemy
           for (GameObject shot : shots) {
-            if (e.collidesWith(shot)) {
+            if (e.getDistance(shot) < 0) {
               actionIfEnemyIsHit(e, shot, gameTime) ;
             }
           }
         }
         
-        
-       	
         // Wenn Herzen einsammeln
          LinkedList<GameObject> collects = collectObjects("collect", false);
          for (GameObject c : collects) {
-             if (s.collidesWith(c)) {
+             if (s.collisionDetection(c)) {
            	   actionIfEgoCollidesWithCollect(c, s, gameTime) ;
              }
 
