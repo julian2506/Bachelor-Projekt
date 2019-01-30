@@ -78,10 +78,6 @@ public class SpaceInvadersLevel extends KeyboardControl {
   public BufferedImage[]  	 heartImage     = null;
   public double[]	 	 	 heartshowTime	= null;
   
-  LinkedList<Collider> enemyCols = new LinkedList<Collider>();
-  LinkedList<Collider> collectCols = new LinkedList<Collider>();
-  
-  public Collider egoCol = null;
 
   public SpaceInvadersLevel(int SIZEX, int SIZEY) {
     super(SIZEX, SIZEY);
@@ -137,15 +133,13 @@ public class SpaceInvadersLevel extends KeyboardControl {
     return new EnemyController() ;
   }
   
-  Collider createRectColl(String id, Playground playground, 
-		  ObjectController controller, double x,
-	      double y, double vx, double vy) { 
-	return new RectCollider(id, playground, controller, x, y, vx, vy);
+  RectCollider createRectColl(String id, Playground playground, 
+		  ObjectController controller) { 
+	return new RectCollider(id, playground, controller);
   }
   
-  Collider createCircColl(String id, Playground playground, ObjectController controller, double x,
-	      double y, double vx, double vy) { 
-	return new CircleCollider(id, playground, controller, x, y, vx, vy);
+  CircleCollider createCircColl(String id, Playground playground, ObjectController controller) { 
+	return new CircleCollider(id, playground, controller);
   }
   
 
@@ -181,13 +175,15 @@ public class SpaceInvadersLevel extends KeyboardControl {
 
       ObjectController enemyController = createEnemyController();
       
-      Collider rectCol = createRectColl("col_enemy"+i, this, 
-    		  enemyController, x_enemy, y_enemy, vx_enemy, vy_enemy);
-      enemyCols.add(rectCol);
+      Collider rectCol = createRectColl("rectCol", this, 
+    		  enemyController);
 
       GameObject enemy = createSingleEnemy("enemy"+i, x_enemy, 
     		  y_enemy, vx_enemy, vy_enemy, enemyController, 
     		  gameTime, rectCol) ;
+      
+      
+      
       addObject(enemy);
     }
   }
@@ -203,9 +199,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
 
 	      ObjectController collectController = createEnemyController();
 	      
-	      Collider rectCol1 = createRectColl("col_collect"+i, this, collectController, x_collect,
-			      y_collect, vx_collect, vy_collect);
-	      collectCols.add(rectCol1);
+	      RectCollider rectCol1 = createRectColl("rectCol", this, collectController);
 
 	      GameObject collect = createSingleCollect("collect"+i, x_collect, y_collect,
 	          vx_collect, vy_collect, collectController, gameTime, rectCol1) ;
@@ -217,8 +211,10 @@ public class SpaceInvadersLevel extends KeyboardControl {
   protected void createEgoObject() {
     // add ego to playground at lower bottom
     EgoController egoController = new EgoController();
-    this.egoCol = new RectCollider("egoCol", this, egoController, 50, canvasY - 60, 0, 0);
+    Collider egoCol = new RectCollider("circCol", this, egoController);
+    
     EgoObject ego = new EgoObject("ego", this, egoController, 50, canvasY - 60, 0, 0, egoCol );
+    
     addObject(ego);
   }
 
@@ -227,8 +223,11 @@ public class SpaceInvadersLevel extends KeyboardControl {
     // add stars to playground
     for (int i = 1; i <= LEVEL2STARS; i++) {
       FallingStarController fallingStartController = new FallingStarController();
+      
+      RectCollider starcol = createRectColl("rectCol", this, fallingStartController);
+      
       FallingStar star = new FallingStar("star" + i, this, fallingStartController,
-          Math.random() * canvasX, Math.random() * 15, 0.0, Math.random() * STARSPEED, null);
+          Math.random() * canvasX, Math.random() * 15, 0.0, Math.random() * STARSPEED, starcol);
       addObject(star);
     }
   }
@@ -294,55 +293,55 @@ public class SpaceInvadersLevel extends KeyboardControl {
   }
   
  void actionIfCollect(GameObject e, GameObject shot, double gameTime) {
-	    //createExplosion(gameTime, e, "shard", DYING_INTERVAL, Color.RED) ;
+	 //createExplosion(gameTime, e, "shard", DYING_INTERVAL, Color.RED) ;
 	    
-	    //JW: ton abspielen
-	    //Music.music(smash);
+	 //JW: ton abspielen
+	 //Music.music(smash);
 
-	    // spawn a bonus points object
-	    double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
-	    double vy = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVY();
+	 // spawn a bonus points object
+	 double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
+	 double vy = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVY();
 
-	    LimitedTimeController bonusTextController =
-	        new LimitedTimeController(gameTime, SpaceInvadersLevel.EXPL_DURATION);
-	    //TextObject bonusText = new TextObject("bonus" + e.getId(), this, bonusTextController,
-	        //e.getX(), e.getY(), vx, vy, "Level up!", 20).setTextColor(Color.YELLOW);
+	 LimitedTimeController bonusTextController =
+	     new LimitedTimeController(gameTime, SpaceInvadersLevel.EXPL_DURATION);
+     //TextObject bonusText = new TextObject("bonus" + e.getId(), this, bonusTextController,
+	 //e.getX(), e.getY(), vx, vy, "Level up!", 20).setTextColor(Color.YELLOW);
 
-	    //addObject(bonusText);
+	 //addObject(bonusText);
 
-	    // delete enemy
-	    deleteObject(e.getId());
+	 // delete enemy
+	 deleteObject(e.getId());
 	    
-	    // delete shot
-	    deleteObject(shot.getId()) ;
+	 // delete shot
+	 deleteObject(shot.getId()) ;
 
-	    // add to points counter
-	    Integer lives = (Integer) getFlag("egoLives") ;
-	    lives++ ;
-	    setFlag ("egoLives",lives) ;
-	  }
+	 // add to points counter
+	 Integer lives = (Integer) getFlag("egoLives") ;
+	 lives++ ;
+	 setFlag ("egoLives",lives) ;
+ }
   
   void actionIfEgoCollidesWithCollect(GameObject e, GameObject ego, double gameTime){
 
-	    /*double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
-	    double vy = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVY();
+	 /*double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
+	 double vy = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVY();
 
-	    LimitedTimeController levelTextController =
-	        new LimitedTimeController(gameTime, SpaceInvadersLevel.EXPL_DURATION);
-	    TextObject bonusText = new TextObject("levelup" + e.getId(), this, levelTextController,
-	       e.getX(), e.getY(), vx, vy, "Level up!", 20).setTextColor(Color.YELLOW);
+	 LimitedTimeController levelTextController =
+	     new LimitedTimeController(gameTime, SpaceInvadersLevel.EXPL_DURATION);
+	 TextObject bonusText = new TextObject("levelup" + e.getId(), this, levelTextController,
+	    e.getX(), e.getY(), vx, vy, "Level up!", 20).setTextColor(Color.YELLOW);
 
-	    addObject(bonusText);*/
+	 addObject(bonusText);*/
 	    
-	    // delete collect
-	    deleteObject(e.getId());
+	 // delete collect
+	 deleteObject(e.getId());
 
-	    // add to points counter
-	    Integer lives = (Integer) getFlag("egoLives") ;
-	    lives++ ;
-	    setFlag ("egoLives",lives); 
+	 // add to points counter
+	 Integer lives = (Integer) getFlag("egoLives") ;
+	 lives++ ;
+	 setFlag ("egoLives",lives); 
 	    
-	  }
+  }
   
   void actionIfEgoCollidesWithEnemy(GameObject e, GameObject ego, double gameTime){
     // set temporary text over ego
@@ -350,7 +349,6 @@ public class SpaceInvadersLevel extends KeyboardControl {
       /*addObject(new TextObject("AUA" + e.getId(), this,
           new LimitedTimeController(gameTime, BONUS_DURATION), ego.getX(), ego.getY() - 20,
           ego.getVX(), ego.getVY(), "AUAA!!", 10));*/
-
       
       // deduct points
       Integer pts = (Integer) getFlag("points");
@@ -359,26 +357,9 @@ public class SpaceInvadersLevel extends KeyboardControl {
     
   }
   
-  
-  void actionIfColliderCollides(Collider e, Collider ego, double gameTime){
-	    // set temporary text over ego
-	    if (getObject("AUA" + e.getId()) == null) {
-	      /*addObject(new TextObject("AUA" + e.getId(), this,
-	          new LimitedTimeController(gameTime, BONUS_DURATION), ego.getX(), ego.getY() - 20,
-	          ego.getVX(), ego.getVY(), "AUAA!!", 10));*/
-
-	      
-	      // deduct points
-	      Integer pts = (Integer) getFlag("points");
-	      setFlag("points", pts - 500);
-	    }
-	    
-	  }
-  
   protected void actionIfEgoObjectIsHit(GameObject eshot, GameObject ego, double gameTime) {
     //System.out.println("collision of " + eshot.getId() + " and " + ego.getId());
     this.deleteObject(eshot.getId()) ;
-    
     
     Integer lives = (Integer) getFlag("egoLives") ;
     lives-- ;
@@ -549,10 +530,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
         setFlag("highscore",alltimeHighscore);
     	dh.closeFile();
      }
-    
   }
-
-
 
   /**
    * applies the logic of the level: For now, this is just about deleting shots that are leaving the
@@ -601,47 +579,25 @@ public class SpaceInvadersLevel extends KeyboardControl {
         LinkedList<GameObject> shots = collectObjects("simpleShot", true);
         for (GameObject e : enemies) {
          // if ego collides with enemy..
-        	if(CollisionDetector.CollisionDetection(s, e)) {
-        	//if(s.getDistance(e) < 0) {
-            //actionIfEgoCollidesWithEnemy(e, s, gameTime);
-            
-            
-            // JW: an welchen Koordinaten wurde Player getroffen?
-            //System.out.println("x-Koordinate von Player " + s.getX());
-            //System.out.println("y-Koordinate von Player " + s.getY());
-            //System.out.println("x-Koordinate von Enemy " + e.getX());
-            //System.out.println("y-Koordinate von Enemy " + e.getY());
-            //System.out.println("                        ");
-
-            
+          if (s.collidesWith(e)) {
+            actionIfEgoCollidesWithEnemy(e, s, gameTime) ;
           }
-        
         	
-          // if short collides with enemy
+          // if shot collides with enemy
           for (GameObject shot : shots) {
-          
-            if (e.getDistance(shot) < 0) {
+            if (e.collidesWith(shot)) {
               actionIfEnemyIsHit(e, shot, gameTime) ;
             }
           }
         }
-    
-        // wenn Collider sich schneiden
-        // Problem: nur Kollisonen erkannt, Positionsveränderungen 
-        // der GO werden nicht richtig übernommen
         
-        for (Collider ec : enemyCols) {
-            if (egoCol.CollidesWith(ec)) {
-          	  	actionIfColliderCollides(ec, egoCol, gameTime) ;
-            }
-
-        }
+        
        	
         // Wenn Herzen einsammeln
          LinkedList<GameObject> collects = collectObjects("collect", false);
          for (GameObject c : collects) {
-             if (CollisionDetector.CollisionDetection(s, c)) {
-           	  actionIfEgoCollidesWithCollect(c, s, gameTime) ;
+             if (s.collidesWith(c)) {
+           	   actionIfEgoCollidesWithCollect(c, s, gameTime) ;
              }
 
          }
