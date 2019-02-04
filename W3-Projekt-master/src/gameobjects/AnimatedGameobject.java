@@ -2,6 +2,7 @@ package gameobjects;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 
 import controller.ObjectController;
 import playground.Playground;
@@ -28,7 +29,7 @@ public class AnimatedGameobject extends GameObject{
 	public AnimatedGameobject(String id, Playground pg, ObjectController o, 
 			double x, double y, double vx,
 		      double vy, double sizeX, double sizeY, double scale, BufferedImage[] imageArray, 
-		      double[] showtime, long zeit, String abspielmodus, Collider col) {
+		      double[] showtime, long zeit, String abspielmodus, LinkedList<Collider> col) {
 		super(id, pg, o, x, y, vx, vy, col);
 		
 		this.imageArray = imageArray;

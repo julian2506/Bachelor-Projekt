@@ -21,10 +21,5 @@ public class CircleCollider extends Collider {
 	}
 
 
-	@Override
-	public boolean CollidesWith(LinkedList<Collider> other) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 }

@@ -33,11 +33,5 @@ public class RectCollider extends Collider {
 		g.fillOval(x1, y1, width1, width1);
 			
 	}
-
-	@Override
-	public boolean CollidesWith(LinkedList<Collider> other) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
 }

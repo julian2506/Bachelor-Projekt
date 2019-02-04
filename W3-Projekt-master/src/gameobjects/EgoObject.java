@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
@@ -21,7 +22,7 @@ public class EgoObject extends GameObject {
 	
 	
   public EgoObject(String id, Playground pg, ObjectController o, double x, double y, double vx,
-      double vy, Collider col) {
+      double vy, LinkedList<Collider> col) {
     super(id, pg, o, x, y, vx, vy, col);
     setRadiusMode(15);
     this.egoImage = null;
