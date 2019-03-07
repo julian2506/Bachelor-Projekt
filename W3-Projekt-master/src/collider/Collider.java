@@ -18,9 +18,9 @@ public abstract class Collider {
 	protected double radY = 0;
 	public String id = null;
 	
-	public double width = 0;
-	public double height = 0;
-	public double radius = 0;
+	public double w = 0;
+	public double h = 0;
+	public double r = 0;
 	
 	protected GameObject gameobject = null;
 	protected Playground playground = null;
@@ -51,6 +51,21 @@ public abstract class Collider {
 			return false;
 	}
 	
+	public boolean checkCollisionRectRect(Collider r1, Collider r2) {	
+
+		if ((r1.x + r1.w/2) >= (r2.x - r2.w/2)) {
+				if ((r1.x - r1.w/2) <= (r2.x + r2.w/2)) {
+					if ((r1.y + r1.h/2) >= (r2.y - r2.h/2)) {
+						if ((r1.y - r1.h) <= (r2.y + r2.h/2)) {
+							//System.out.println("Kollision Rechteck mit Rechteck");
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+	}
+	
 	public boolean checkCollisionCircRect(double cx, double cy, double cr, double rx, double ry, double rw, double rh) {
 		double circleDistX = Math.abs(cx - (rx + rw/2));
 		double circleDistY = Math.abs(cy - (ry + rw/2));
@@ -72,12 +87,49 @@ public abstract class Collider {
 		double cornerDistSqr = Math.pow(circleDistX-rw/2, 2) + Math.pow(circleDistY-rh/2, 2); // Satz des Pythagoras
 		return (cornerDistSqr <= cr*cr); // falls true zurueckgegeben: Kollision
 	}
+	
+	public boolean checkCollisionCircRect(Collider c, Collider r) {
+		double circleDistX = Math.abs(c.x - (r.x + r.w/2));
+		double circleDistY = Math.abs(c.y - (r.y + r.w/2));
+			
+		//System.out.println("c.x:"+c.x+" "+"c.y:"+c.y+" "+"c.r:"+c.r+" "+"r.x:"+r.x+" "+"r.y:"+r.y+" "+"r.w:"+r.w+" "+"r.h:"+r.h+" "+"circleDistX:"+circleDistX+" "+"circleDistY:"+circleDistY);
+
+		if(circleDistX > (r.w/2 + c.r )) return false;
+		if(circleDistY > (r.h/2 + c.r )) return false;
+			
+		if(circleDistX <= (r.w/2)) {	
+			//System.out.println("Kollision Rechteck mit Kreis");
+			return true; 
+		}
+		if(circleDistY <= (r.h/2)) {
+			//System.out.println("Kollision Rechteck mit Kreis2");
+			return true; 
+		}
+					
+		double cornerDistSqr = Math.pow(circleDistX - r.w/2, 2) + Math.pow(circleDistY - r.h/2, 2); // Satz des Pythagoras
+		return (cornerDistSqr <= c.r*c.r); // falls true zurueckgegeben: Kollision
+	}
 
 	public boolean checkCollisionCircCirc(double cx1, double cy1, double cr1, double cx2, double cy2, double cr2) {
 		//System.out.println(cx1 + " " + cy1 + " " + cr1 + " " + cx2 + " " + cy2+ " " + cr2);
 		int kathete1 = (int) (Math.abs(cx2-cx1));
 		int kathete2 = (int) (Math.abs(cy2-cy1));
 		int hypothenuse = (int) (cr1+cr2);
+		
+		//System.out.println(kathete1 + " " + kathete2 + " " + hypothenuse + " ");
+		
+		if (((kathete1^2) + (kathete2^2)) <= (hypothenuse^2)) {
+			//System.out.println("Kollision");
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean checkCollisionCircCirc(Collider c1, Collider c2) {
+		//System.out.println(c1.x + " " + c1.y + " " + c1.r + " " + c2.x + " " + c2.y+ " " + c2.r);
+		int kathete1 = (int) (Math.abs(c2.x - c1.x));
+		int kathete2 = (int) (Math.abs(c2.x - c1.y));
+		int hypothenuse = (int) (c1.r + c2.r);
 		
 		//System.out.println(kathete1 + " " + kathete2 + " " + hypothenuse + " ");
 		
@@ -116,26 +168,22 @@ public abstract class Collider {
 		//System.out.println("Check");
 			
 			if (this.id == "rectCol" && other.id == "circCol") {
-				if (checkCollisionCircRect(other.x, other.y, other.width/2, 
-						this.x, this.y, this.width, this.height)) {
+				if (checkCollisionCircRect(this, other)) {
 					return true;
 				}
 			}
 			if (this.id == "circCol" && other.id == "rectCol") {
-				if (checkCollisionCircRect(this.x, this.y, this.width, 
-						other.x, other.y, other.width, other.height)) {
+				if (checkCollisionCircRect(this, other)) {
 					return true;
 				}
 			}
 			if (this.id == "rectCol" && other.id == "rectCol") {
-				if (checkCollisionRectRect(this.x, this.y, this.width, 
-						this.height, other.x, other.y, other.width, other.height)) {
+				if (checkCollisionRectRect(this, other)) {
 					return true;
 				}
 			}
 			if (this.id == "circCol" && other.id == "circCol") {
-				if (checkCollisionCircCirc(this.x, this.y, this.width, 
-						other.x, other.y, other.width)) {
+				if (checkCollisionCircCirc(this, other)) {
 					return true;
 				}
 			}
@@ -174,15 +222,16 @@ public abstract class Collider {
 	}
 	
 	public void updateCol(double gametime) {
+		
 		this.x = gameobject.getX();
 		this.y = gameobject.getY();
 		this.vx = gameobject.getVX();
 		this.vy = gameobject.getVY();
 		if (this.id == "rectCol") {
-			this.width = gameobject.getWidth();
-			this.height = gameobject.getHeight();
+			this.w = gameobject.getWidth();
+			this.h = gameobject.getHeight();
 		} else {
-			this.radius = gameobject.getRadius();
+			this.r = gameobject.getRadius();
 		}
 		//System.out.println("x Ko ENEMY(" + gameobject.id + ": " + this.x + ", y Ko ENEMY(" + gameobject.id + ": " + this.y);  
 	}

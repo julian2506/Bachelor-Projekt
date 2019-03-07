@@ -54,7 +54,7 @@ public class BossLevel extends SpaceInvadersLevel {
 
   @Override
   protected GameObject createEnemyShotObject(GameObject parentObject, String name,
-      ObjectController limitedTimeController) {
+      ObjectController limitedTimeController, LinkedList<Collider> col) {
     GameObject ego = this.getObject("ego");
 
     double deltax = parentObject.getX() - ego.getX();
@@ -65,7 +65,7 @@ public class BossLevel extends SpaceInvadersLevel {
     deltay *= -ENEMYSHOTSPEED / norm;
 
     TextObject to = new TextObject(name, this, limitedTimeController, parentObject.getX(),
-        parentObject.getY(), deltax, deltay, "*", 20);
+        parentObject.getY(), deltax, deltay, "*", 20, col);
     to.setTextColor(Color.GREEN);
     return to;
 

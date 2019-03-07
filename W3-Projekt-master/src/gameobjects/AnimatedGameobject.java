@@ -27,21 +27,21 @@ public class AnimatedGameobject extends GameObject{
 	int forFrame = 0;
 
 	public AnimatedGameobject(String id, Playground pg, ObjectController o, 
-			double x, double y, double vx,
-		      double vy, double sizeX, double sizeY, double scale, BufferedImage[] imageArray, 
-		      double[] showtime, long zeit, String abspielmodus, LinkedList<Collider> col) {
-		super(id, pg, o, x, y, vx, vy, col);
+			double x, double y, double vx, double vy, double sizeX, double sizeY, 
+			double scale, BufferedImage[] imageArray, 
+		    double[] showtime, long zeit, String abspielmodus, LinkedList<Collider> col) {
+		super(id, pg, o, x, y, vx, vy, col); // Konstruktor-Aufruf GameObject
 		
 		this.imageArray = imageArray;
 		this.showtime = showtime;
 		this.zeit = zeit;
+		this.backFrame = imageArray.length-1;
 			
 		if(abspielmodus.equals("loop")) this.loop = true;
 		if(abspielmodus.equals("rueckwaerts")) this.rueckwaerts = true;
 		if(abspielmodus.equals("vorwaerts")) this.vorwaerts = true;
 			
-		for (int i = 0; i < imageArray.length; i++ ) { 
-				
+		for (int i = 0; i < imageArray.length; i++ ) { 	
 			// Radius festlegen
 			if (imageArray[i].getHeight() == imageArray[i].getWidth()) {
 				setRadius(imageArray[i].getWidth() * scale);
@@ -60,10 +60,10 @@ public class AnimatedGameobject extends GameObject{
 		
 		long elapsedTime = i2 - zeit;
 		
+		// Differenz von Millisekunden in Sekunden umwandeln
 		double seconds = (double)elapsedTime / 1000000000.0;
 		
 			if(loop) {
-				
 				if (loopFrame >= imageArray.length) loopFrame = 0;
 				if (index >= showtime.length) index = 0;
 				
@@ -75,7 +75,6 @@ public class AnimatedGameobject extends GameObject{
 					zeit = System.nanoTime();
 					//System.out.println(showtime[index]);
 					index++;
-					
 				} else {
 					g.drawImage(imageArray[loopFrame], (int) Math.round(x - rx), 
 							(int) Math.round(y - ry), (int) rx * 2,
@@ -84,7 +83,6 @@ public class AnimatedGameobject extends GameObject{
 			}
 			
 			if (vorwaerts) {
-				
 				if (seconds >= showtime[index] && forFrame < imageArray.length-1) {
 					g.drawImage(imageArray[forFrame], (int) Math.round(x - rx), 
 							(int) Math.round(y - ry), (int) rx * 2,
@@ -100,7 +98,6 @@ public class AnimatedGameobject extends GameObject{
 			} 
 			
 			if(rueckwaerts) {
-			
 				if (seconds >= showtime[index] && backFrame > 1) {
 					g.drawImage(imageArray[backFrame], (int) Math.round(x - rx), 
 							(int) Math.round(y - ry), (int) rx * 2,

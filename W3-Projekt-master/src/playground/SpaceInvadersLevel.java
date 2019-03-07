@@ -85,9 +85,9 @@ public class SpaceInvadersLevel extends KeyboardControl {
   }
 
   protected GameObject createEnemyShotObject(GameObject parentObject, String name,
-                                             ObjectController limitedTimeController) {
+                                             ObjectController limitedTimeController, LinkedList<Collider> col) {
     TextObject to =  new TextObject(name, this,
-          limitedTimeController, parentObject.getX(), parentObject.getY(), 0, ENEMYSHOTSPEED, "I", 20);
+          limitedTimeController, parentObject.getX(), parentObject.getY(), 0, ENEMYSHOTSPEED, "I", 20, col);
       to.setTextColor(Color.YELLOW);
       return to ;
 
@@ -102,7 +102,15 @@ public class SpaceInvadersLevel extends KeyboardControl {
       setFlag("enemyShotCounter", Integer.valueOf(++nrEnemyShots));
 
       LimitedTimeController limitedTimeController = new LimitedTimeController(gameTime, 5.);
-      GameObject textObject = createEnemyShotObject(e, "enmyShot" + nrEnemyShots, limitedTimeController) ;
+      
+      LinkedList<Collider> shotcol = new LinkedList<Collider>();
+      
+      Collider shotCol = createRectColl("rectCol", this, 
+    		  limitedTimeController);
+      
+      shotcol.add(shotCol);
+      
+      GameObject textObject = createEnemyShotObject(e, "enmyShot" + nrEnemyShots, limitedTimeController, shotcol) ;
 
       addObject(textObject);
     }
@@ -178,7 +186,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
       
       LinkedList<Collider> enemycol = new LinkedList<Collider>();
       
-      Collider rectCol = createRectColl("rectCol", this, 
+      RectCollider rectCol = createRectColl("rectCol", this, 
     		  enemyController);
       
       enemycol.add(rectCol);
@@ -234,7 +242,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
       FallingStarController fallingStartController = new FallingStarController();
       
       LinkedList<Collider> starcols = new LinkedList<Collider>();
-      RectCollider starcol = createRectColl("rectCol", this, fallingStartController);
+      CircleCollider starcol = createCircColl("circCol", this, fallingStartController);
       
       starcols.add(starcol);
       
@@ -285,12 +293,12 @@ public class SpaceInvadersLevel extends KeyboardControl {
     double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
     double vy = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVY();
 
-    LimitedTimeController bonusTextController =
-        new LimitedTimeController(gameTime, SpaceInvadersLevel.EXPL_DURATION);
-    TextObject bonusText = new TextObject("bonus" + e.getId(), this, bonusTextController,
-        e.getX(), e.getY(), vx, vy, "200!", 20).setTextColor(Color.YELLOW);
+    /*LimitedTimeController bonusTextController =
+            new LimitedTimeController(gameTime, SpaceInvadersLevel.EXPL_DURATION);
+        TextObject bonusText = new TextObject("bonus" + e.getId(), this, bonusTextController,
+            e.getX(), e.getY(), vx, vy, "200!", 20).setTextColor(Color.YELLOW);
 
-    addObject(bonusText);
+        addObject(bonusText);*/
 
     // delete enemy
     deleteObject(e.getId());
@@ -334,16 +342,6 @@ public class SpaceInvadersLevel extends KeyboardControl {
  }
   
   void actionIfEgoCollidesWithCollect(GameObject e, GameObject ego, double gameTime){
-
-	 /*double vx = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVX();
-	 double vy = 2 * (Math.random() - 0.5) * SHARDSPEED + e.getVY();
-
-	 LimitedTimeController levelTextController =
-	     new LimitedTimeController(gameTime, SpaceInvadersLevel.EXPL_DURATION);
-	 TextObject bonusText = new TextObject("levelup" + e.getId(), this, levelTextController,
-	    e.getX(), e.getY(), vx, vy, "Level up!", 20).setTextColor(Color.YELLOW);
-
-	 addObject(bonusText);*/
 	    
 	 // delete collect
 	 deleteObject(e.getId());
@@ -591,13 +589,13 @@ public class SpaceInvadersLevel extends KeyboardControl {
         LinkedList<GameObject> shots = collectObjects("simpleShot", true);
         for (GameObject e : enemies) {
          // if ego collides with enemy..
-          if (s.collisionDetection(e)) {
+          if (e.collisionDetection(s)) {
             actionIfEgoCollidesWithEnemy(e, s, gameTime) ;
           }
         	
           // if shot collides with enemy
           for (GameObject shot : shots) {
-            if (e.getDistance(shot) < 0) {
+            if (e.collisionDetection(shot)) {
               actionIfEnemyIsHit(e, shot, gameTime) ;
             }
           }
@@ -615,14 +613,14 @@ public class SpaceInvadersLevel extends KeyboardControl {
 
         // loop over enemies and, with a certain probability, launch an enemy shot for each one
         for (GameObject e : enemies) {
-          //createEnemyShot(e, gameTime);
+          createEnemyShot(e, gameTime);
         }
 
         // check for collisions between ego object and enemy shots
         LinkedList<GameObject> eshots = collectObjects("enmyShot", true);
         for (GameObject eshot : eshots) {
 
-          if (eshot.getDistance(s) < 0) {
+          if (s.collisionDetection(eshot)) {
             actionIfEgoObjectIsHit(eshot, s, gameTime) ;
           }
 

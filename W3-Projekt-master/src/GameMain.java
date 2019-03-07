@@ -77,7 +77,8 @@ public class GameMain {
       
       while ((playground.levelFinished() || playground.gameOver()) == false) {
     	 
-    	  if ((GameUI.buttonPressed == 1) || (KeyboardControl.keyInput == 1)) {
+    	  if ((GameUI.buttonPressed == 1) || 
+    		  (KeyboardControl.keyInput == 1)) {
     		  //Spiel neu starten
     		  gameUI.setPlayground(playground);
     		  //playground.reset();

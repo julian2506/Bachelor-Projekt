@@ -48,7 +48,7 @@ public abstract class GameObject {
   public int collisionMode = GameObject.RADIUS;
 
   private ObjectController controller = null;
-  private Collider col = null;
+  //private Collider col = null;
   public LinkedList<Collider> scol;
 
   public GameObject(String id, Playground playground, 
@@ -109,12 +109,13 @@ public abstract class GameObject {
 	  for(Collider c : this.scol) {
 		  for(Collider o : other.scol) {
 			  if(c.CollidesWith(o)) {
-					 System.out.println("Check");
+				  System.out.println(c.id + " " + o.id);	 
 					 return true;
 			  }
 		  }
 	  }
 	return false;
+	 
   }
 
 
@@ -130,8 +131,8 @@ public abstract class GameObject {
     
     // ueberpruefen, ob GameObject einen 
     // Collider hat und diesen updaten
-    if (col != null) {
-    	for(Collider c : scol) {
+    if (scol != null) {
+    	for(Collider c : this.scol) {
     		c.updateCol(gameTime);
     	}	
   	}
@@ -266,9 +267,6 @@ public abstract class GameObject {
     this.controller = controller;
   }
   
-  public void setCollider(Collider collider) {
-	    this.col = collider;
-  }
 
   /**
    * Draws the object in its current state. Is called by the game engine, should NOT be called by

@@ -48,11 +48,12 @@ public class GameUI implements ActionListener {
     frame = new JFrame("Prog2 Ballerspiel!");
     frame.setContentPane(panel);
     
-    // menuleiste erzeugen und hinzufügen!
+    // Menuleiste erzeugen und hinzufügen!
     this.playItem = new JMenuItem("New Game");
     this.loadItem = new JMenuItem("Restore game");
     this.saveItem = new JMenuItem("Save game");    
     this.quitItem = new JMenuItem("Exit game");
+    
     this.playItem.addActionListener(this); 
     this.loadItem.addActionListener(this); 
     this.saveItem.addActionListener(this); 
