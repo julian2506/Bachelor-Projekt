@@ -47,7 +47,6 @@ public abstract class GameObject {
   public int collisionMode = GameObject.RADIUS;
 
   private ObjectController controller = null;
-  //private Collider col = null;
   public LinkedList<Collider> scol;
 
   public GameObject(String id, Playground playground, 
