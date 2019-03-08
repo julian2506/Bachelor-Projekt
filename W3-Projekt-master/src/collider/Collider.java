@@ -134,38 +134,7 @@ public abstract class Collider {
 				if (checkCollisionCircCirc(this, other)) {
 					return true;
 				}
-			}
-			/*if (this.id == "compCol" && other.id == "circCol") {
-				for (Collider s : this.scol) {
-					if (s.id == "rectCol" && sc.id == "circCol") {
-						if (checkCollisionCircRect(sc.x, sc.y, sc.width/2, s.x, s.y, s.width, s.height)) {
-							return true;
-						}
-					}	
-					if (s.id == "circCol" && sc.id == "circCol") {
-						if (checkCollisionCircCirc(s.x, s.y, s.width, sc.x, sc.y, sc.width)) {
-							return true;
-						}
-					}
-				}
-			}
-			if (this.id == "compCol" && sc.id == "rectCol") {
-				for (Collider s : this.scol) {
-					if (s.id == "rectCol" && sc.id == "rectCol") {
-						if (checkCollisionRectRect(s.x, s.y, s.width, s.height, sc.x, sc.y, sc.width, sc.height)) {
-							return true;
-						}
-					}
-					
-					if (s.id == "circCol" && sc.id == "rectCol") {
-						if (checkCollisionCircRect(s.x, s.y, s.width, sc.x, sc.y, sc.width, sc.height)) {
-							return true;
-						}
-					}
-				}
-				
-			}*/
-		
+			}		
 		return false;
 	}
 	
