@@ -589,7 +589,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
         LinkedList<GameObject> shots = collectObjects("simpleShot", true);
         for (GameObject e : enemies) {
          // if ego collides with enemy..
-          if (e.collisionDetection(s)) {
+          if (s.collisionDetection(e)) {
             actionIfEgoCollidesWithEnemy(e, s, gameTime) ;
           }
         	
