@@ -56,7 +56,8 @@ public class BonusLevel extends HitTwiceLevel {
   protected void spawnBonusObject(double gameTime) {
     double rx = Math.random()*this.getSizeX()*0.8+0.1*getSizeX() ;
     double ry = Math.random()*this.getSizeY() + 0.1*getSizeY();
-    TextObject bo = new TextObject("bonus", this, new LimitedTimeController(gameTime, BONUSINTERVAL*0.7), rx,ry,0,0,"bonus",20) ;
+    TextObject bo = new TextObject("bonus", this, new LimitedTimeController(gameTime, BONUSINTERVAL*0.7), 
+    		rx,ry,0,0,"bonus",20) ;
     bo.setTextColor(Color.GREEN) ;
     addObject(bo) ;
   }
