@@ -16,7 +16,6 @@ import javax.imageio.ImageIO;
 
 import collider.CircleCollider;
 import collider.Collider;
-import collider.CompositeCollider;
 import collider.RectCollider;
 import controller.EnemyController;
 import controller.FallingStarController;
@@ -30,7 +29,6 @@ import gameobjects.FallingStar;
 import gameobjects.GameObject;
 import gameobjects.EgoObject;
 import gameobjects.TextObject;
-import playground.CollisionDetector;
 
 import java.util.Scanner;
 

@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
 import collider.Collider;
-import collider.CompositeCollider;
 import controller.ObjectController;
 import playground.Playground;
 
