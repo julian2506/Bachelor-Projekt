@@ -2,9 +2,9 @@ package gameobjects;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 
 import collider.Collider;
-import collider.CompositeCollider;
 import controller.ObjectController;
 import playground.Playground;
 
@@ -47,11 +47,12 @@ public abstract class GameObject {
   public int collisionMode = GameObject.RADIUS;
 
   private ObjectController controller = null;
-  private Collider col = null;
+  //private Collider col = null;
+  public LinkedList<Collider> scol;
 
   public GameObject(String id, Playground playground, 
 		  ObjectController controller, double x,
-		  double y, double vx, double vy, Collider col) {
+		  double y, double vx, double vy, LinkedList<Collider> col) {
     setX(x);
     setY(y);
     setVX(vx);
@@ -60,10 +61,12 @@ public abstract class GameObject {
     this.controller = controller;
     this.controller.setObject(this);
     this.controller.setPlayground(playground);
-    this.col = col;
-    this.col.setObject(this);
-    this.col.setController(controller);
-    this.col.setPlayground(playground);
+    this.scol = col;
+    for(Collider c : scol) {
+    	c.setObject(this);
+        c.setController(controller);
+        c.setPlayground(playground);
+    }
   }
   
   public GameObject(String id, Playground playground, ObjectController controller, double x,
@@ -102,12 +105,16 @@ public abstract class GameObject {
   }
   
   public boolean collisionDetection(GameObject other) {
-	  if(this.col.CollidesWith(other.col.scol)) {
-		 //System.out.println("Check");
-		 return true;
-	 }
-
+	  for(Collider c : this.scol) {
+		  for(Collider o : other.scol) {
+			  if(c.CollidesWith(o)) {
+				  System.out.println(c.id + " " + o.id);	 
+					 return true;
+			  }
+		  }
+	  }
 	return false;
+	 
   }
 
 
@@ -123,8 +130,10 @@ public abstract class GameObject {
     
     // ueberpruefen, ob GameObject einen 
     // Collider hat und diesen updaten
-    if (col != null) {
-  	  col.updateCol(gameTime);
+    if (scol != null) {
+    	for(Collider c : this.scol) {
+    		c.updateCol(gameTime);
+    	}	
   	}
   }
 
@@ -257,9 +266,6 @@ public abstract class GameObject {
     this.controller = controller;
   }
   
-  public void setCollider(Collider collider) {
-	    this.col = collider;
-  }
 
   /**
    * Draws the object in its current state. Is called by the game engine, should NOT be called by

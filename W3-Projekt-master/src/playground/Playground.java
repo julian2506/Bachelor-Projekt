@@ -219,6 +219,7 @@ public abstract class Playground {
     for (GameObject gameObject : gameObjects.values()) {
       if (gameObject.isActive() == true) {
         gameObject.updateObject(gameTime);
+        //System.out.println(gameObject.scol);
       }
     }
     

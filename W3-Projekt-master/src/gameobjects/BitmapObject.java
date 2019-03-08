@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+
 import javax.imageio.ImageIO;
 
 import collider.Collider;
@@ -17,8 +19,8 @@ public class BitmapObject extends GameObject {
 
 
   public BitmapObject(String id, Playground pg, ObjectController c, double x, double y, double vx,
-      double vy, String bitmap, double scale) {
-    super(id, pg, c, x, y, vx, vy);
+      double vy, String bitmap, double scale, LinkedList<Collider> col) {
+    super(id, pg, c, x, y, vx, vy, col);
 
     try {
       img = ImageIO.read(new File(bitmap));
@@ -27,8 +29,8 @@ public class BitmapObject extends GameObject {
   }
 
   public BitmapObject(String id, Playground pg, ObjectController o, double x, double y, double vx,
-      double vy, BufferedImage bitmap, double scale) {
-    super(id, pg, o, x, y, vx, vy);
+      double vy, BufferedImage bitmap, double scale, LinkedList<Collider> col) {
+    super(id, pg, o, x, y, vx, vy, col);
 
     img = bitmap;
 
@@ -42,8 +44,8 @@ public class BitmapObject extends GameObject {
   }
 
   public BitmapObject(String id, Playground pg, ObjectController o, double x, double y, double vx,
-      double vy, BufferedImage bitmap, double sizeX, double sizeY) {
-    super(id, pg, o, x, y, vx, vy);
+      double vy, BufferedImage bitmap, double sizeX, double sizeY, LinkedList<Collider> col) {
+    super(id, pg, o, x, y, vx, vy, col);
 
     img = bitmap;
 

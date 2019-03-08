@@ -1,6 +1,7 @@
 package playground;
 
 import java.awt.Color;
+import java.util.LinkedList;
 
 import collider.Collider;
 import controller.EgoController;
@@ -53,7 +54,7 @@ public class BossLevel extends SpaceInvadersLevel {
 
   @Override
   protected GameObject createEnemyShotObject(GameObject parentObject, String name,
-      ObjectController limitedTimeController) {
+      ObjectController limitedTimeController, LinkedList<Collider> col) {
     GameObject ego = this.getObject("ego");
 
     double deltax = parentObject.getX() - ego.getX();
@@ -64,7 +65,7 @@ public class BossLevel extends SpaceInvadersLevel {
     deltay *= -ENEMYSHOTSPEED / norm;
 
     TextObject to = new TextObject(name, this, limitedTimeController, parentObject.getX(),
-        parentObject.getY(), deltax, deltay, "*", 20);
+        parentObject.getY(), deltax, deltay, "*", 20, col);
     to.setTextColor(Color.GREEN);
     return to;
 
@@ -73,7 +74,7 @@ public class BossLevel extends SpaceInvadersLevel {
 
   @Override
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
-      double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime, Collider col) {
+      double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime, LinkedList<Collider> col) {
     return new AnimatedGameobject(name, this, enemyController, this.canvasX / 2, 10,
             vx_enemy, 50, this.canvasX / 5, this.canvasY / 5, 0.1, alienImage, alienshowTime, startzeit, "loop", col);
   }
