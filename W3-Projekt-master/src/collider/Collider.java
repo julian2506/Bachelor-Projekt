@@ -36,21 +36,6 @@ public abstract class Collider {
 		
 	}
 	
-	public boolean checkCollisionRectRect(double rx1, double ry1, double rw1, double rh1, double rx2, double ry2, double rw2, double rh2) {	
-
-		if ((rx1 + rw1/2) >= (rx2-rw2/2)) {
-				if ((rx1 - rw1/2) <= (rx2+rw2/2)) {
-					if ((ry1 + rh1/2) >= (ry2-rh2/2)) {
-						if ((ry1-rh1) <= (ry2+rh2/2)) {
-							//System.out.println("Kollision Rechteck mit Rechteck");
-							return true;
-						}
-					}
-				}
-			}
-			return false;
-	}
-	
 	public boolean checkCollisionRectRect(Collider r1, Collider r2) {	
 
 		if ((r1.x + r1.w/2) >= (r2.x - r2.w/2)) {
@@ -64,28 +49,6 @@ public abstract class Collider {
 				}
 			}
 			return false;
-	}
-	
-	public boolean checkCollisionCircRect(double cx, double cy, double cr, double rx, double ry, double rw, double rh) {
-		double circleDistX = Math.abs(cx - (rx + rw/2));
-		double circleDistY = Math.abs(cy - (ry + rw/2));
-			
-		//System.out.println("cx:"+cx+" "+"cy:"+cy+" "+"cr:"+cr+" "+"rx:"+rx+" "+"ry:"+ry+" "+"rw:"+rw+" "+"rh:"+rh+" "+"circleDistX:"+circleDistX+" "+"circleDistY:"+circleDistY);
-
-		if(circleDistX > (rw/2 + cr )) return false;
-		if(circleDistY > (rh/2 + cr )) return false;
-			
-		if(circleDistX <= (rw/2)) {	
-			//System.out.println("Kollision Rechteck mit Kreis");
-			return true; 
-		}
-		if(circleDistY <= (rh/2)) {
-			//System.out.println("Kollision Rechteck mit Kreis2");
-			return true; 
-		}
-					
-		double cornerDistSqr = Math.pow(circleDistX-rw/2, 2) + Math.pow(circleDistY-rh/2, 2); // Satz des Pythagoras
-		return (cornerDistSqr <= cr*cr); // falls true zurueckgegeben: Kollision
 	}
 	
 	public boolean checkCollisionCircRect(Collider c, Collider r) {
@@ -108,21 +71,6 @@ public abstract class Collider {
 					
 		double cornerDistSqr = Math.pow(circleDistX - r.w/2, 2) + Math.pow(circleDistY - r.h/2, 2); // Satz des Pythagoras
 		return (cornerDistSqr <= c.r*c.r); // falls true zurueckgegeben: Kollision
-	}
-
-	public boolean checkCollisionCircCirc(double cx1, double cy1, double cr1, double cx2, double cy2, double cr2) {
-		//System.out.println(cx1 + " " + cy1 + " " + cr1 + " " + cx2 + " " + cy2+ " " + cr2);
-		int kathete1 = (int) (Math.abs(cx2-cx1));
-		int kathete2 = (int) (Math.abs(cy2-cy1));
-		int hypothenuse = (int) (cr1+cr2);
-		
-		//System.out.println(kathete1 + " " + kathete2 + " " + hypothenuse + " ");
-		
-		if (((kathete1^2) + (kathete2^2)) <= (hypothenuse^2)) {
-			//System.out.println("Kollision");
-			return true;
-		}
-		return false;
 	}
 	
 	public boolean checkCollisionCircCirc(Collider c1, Collider c2) {
