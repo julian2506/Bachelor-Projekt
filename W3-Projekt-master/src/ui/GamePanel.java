@@ -72,7 +72,7 @@ class GamePanel extends JPanel implements KeyListener {
   public void keyPressed(KeyEvent e) {
     this.keys.put(e.getKeyCode(), 2);
     currentKey = e.getKeyCode();
-    // System.out.println("keyCode " + e.getKeyCode());
+    //System.out.println("keyCode " + e.getKeyCode());
   }
 
   @Override
