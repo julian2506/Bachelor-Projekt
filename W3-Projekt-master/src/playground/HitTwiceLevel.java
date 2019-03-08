@@ -11,6 +11,9 @@ import gameobjects.GameObject;
 import gameobjects.TextObject;
 
 import java.awt.Color;
+import java.util.LinkedList;
+
+import collider.Collider;
 
 
 
@@ -65,7 +68,7 @@ public class HitTwiceLevel extends SpaceInvadersLevel {
     
   @Override
   protected GameObject createEnemyShotObject(GameObject parentObject, String name,
-      ObjectController limitedTimeController) {
+      ObjectController limitedTimeController, LinkedList<Collider> col) {
     
     GameObject ego = getObject("ego") ;
     double diffX = parentObject.getX()-ego.getX() ;
@@ -74,7 +77,7 @@ public class HitTwiceLevel extends SpaceInvadersLevel {
     double vx = diffX/norm * ENEMYSHOTSPEED ;
     double vy = diffY/norm * ENEMYSHOTSPEED ;
     
-    TextObject to = new TextObject(name, this, limitedTimeController, parentObject.getX(), parentObject.getY(), -vx, -vy, "*", 20);
+    TextObject to = new TextObject(name, this, limitedTimeController, parentObject.getX(), parentObject.getY(), -vx, -vy, "*", 20, col);
     to.setTextColor(Color.BLUE);
     return to ;
     

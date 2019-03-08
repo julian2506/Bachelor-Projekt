@@ -1,5 +1,7 @@
 package playground;
 
+import java.util.LinkedList;
+
 import collider.Collider;
 import controller.FallingStarController;
 import controller.ObjectController;
@@ -39,7 +41,7 @@ public class Level3 extends SpaceInvadersLevel {
 
   @Override
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
-      double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime, Collider col) {
+      double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime, LinkedList<Collider> col) {
     ObjectController zzController = new ZickZackController(gameTime, 0.5);
     return new AnimatedGameobject(name, this, zzController, x_enemy, y_enemy,
             vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.1, alienImage, alienshowTime, startzeit, "loop", col);

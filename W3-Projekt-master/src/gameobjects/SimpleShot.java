@@ -3,6 +3,7 @@ package gameobjects;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.File;
+import java.util.LinkedList;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -19,12 +20,12 @@ public class SimpleShot extends GameObject {
 	
   public SimpleShot(String id, Playground pg, ObjectController o, 
 		  double x, double y, double vx,
-		  double vy) {
-    super(id, pg, o, x, y, vx, vy);
+		  double vy, LinkedList<Collider> col) {
+    super(id, pg, o, x, y, vx, vy, col);
   
     this.laser = SpaceInvadersLevel.laser;
 
-    setWidthAndHeight(6,20);
+    setWidthAndHeight(3, 12);
 
   }
 
@@ -32,6 +33,6 @@ public class SimpleShot extends GameObject {
     g.setColor(Color.CYAN);
 
     g.drawLine((int) (Math.round(this.x)), (int) (Math.round(this.y)), (int) Math.round(this.x),
-        (int) Math.round(this.y - this.radius));
+        (int) Math.round(this.y - 10));
   }
 }

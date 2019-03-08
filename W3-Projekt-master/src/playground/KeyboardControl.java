@@ -2,7 +2,9 @@ package playground;
 
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.LinkedList;
 
+import collider.Collider;
 import collider.RectCollider;
 import controller.EgoController;
 import controller.FallingStarController;
@@ -99,9 +101,16 @@ public abstract class KeyboardControl extends Playground {
 
     if (keys.getOrDefault(KeyEvent.VK_SPACE, 0) == 2) {
       SimpleShotController simpleshot = new SimpleShotController();
+      
+      LinkedList<Collider> shotcols = new LinkedList<Collider>();
+      RectCollider shotcol = new RectCollider("rectCol", this, simpleshot);
+      
+      shotcols.add(shotcol);
+      
       addObject(new SimpleShot("simpleShot" + nextShot++, this, 
     		  simpleshot,
-          ego.getX(), ego.getY(), 0, -1. * SHOTSPEED));
+          ego.getX(), ego.getY(), 0, -1. * SHOTSPEED, shotcols));
+      
       keys.remove(KeyEvent.VK_SPACE);
       keys.remove(KeyEvent.VK_P);
     }
