@@ -156,8 +156,10 @@ public class SpaceInvadersLevel extends KeyboardControl {
 
 
   protected GameObject createSingleEnemy(String name, double x_enemy, double y_enemy,
-          double vx_enemy, double vy_enemy, ObjectController enemyController, double gameTime, LinkedList<Collider> col) {
-      return new AnimatedGameobject(name, this, enemyController, x_enemy, y_enemy,
+          double vx_enemy, double vy_enemy, ObjectController enemyController, 
+          double gameTime, LinkedList<Collider> col) {
+     
+	  return new AnimatedGameobject(name, this, enemyController, x_enemy, y_enemy,
               vx_enemy, vy_enemy, this.canvasX / 10, this.canvasY / 10, 0.4, 
               this.alienImage, this.alienshowTime, startzeit, "loop", col);
   }

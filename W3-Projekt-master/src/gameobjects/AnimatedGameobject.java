@@ -16,14 +16,13 @@ public class AnimatedGameobject extends GameObject{
 	
 	private BufferedImage[] imageArray;
 	double showtime[];
-	int index = 0;
 	long zeit;
 	boolean loop = false;
 	boolean rueckwaerts = false;
 	boolean vorwaerts = false;
 	
 	int loopFrame = 0;
-	int backFrame = 7;
+	int backFrame = 0;
 	int forFrame = 0;
 
 	public AnimatedGameobject(String id, Playground pg, ObjectController o, 
@@ -35,7 +34,7 @@ public class AnimatedGameobject extends GameObject{
 		this.imageArray = imageArray;
 		this.showtime = showtime;
 		this.zeit = zeit;
-		this.backFrame = imageArray.length-1;
+		this.backFrame = (imageArray.length - 1);
 			
 		if(abspielmodus.equals("loop")) this.loop = true;
 		if(abspielmodus.equals("rueckwaerts")) this.rueckwaerts = true;
@@ -65,16 +64,14 @@ public class AnimatedGameobject extends GameObject{
 		
 			if(loop) {
 				if (loopFrame >= imageArray.length) loopFrame = 0;
-				if (index >= showtime.length) index = 0;
 				
-				if (seconds >= showtime[index]) {
+				if (seconds >= showtime[loopFrame]) {
 					g.drawImage(imageArray[loopFrame], (int) Math.round(x - rx), 
 							(int) Math.round(y - ry), (int) rx * 2,
 		    	  			(int) ry * 2, null);
 					loopFrame++;
 					zeit = System.nanoTime();
 					//System.out.println(showtime[index]);
-					index++;
 				} else {
 					g.drawImage(imageArray[loopFrame], (int) Math.round(x - rx), 
 							(int) Math.round(y - ry), (int) rx * 2,
@@ -83,13 +80,12 @@ public class AnimatedGameobject extends GameObject{
 			}
 			
 			if (vorwaerts) {
-				if (seconds >= showtime[index] && forFrame < imageArray.length-1) {
+				if (seconds >= showtime[forFrame] && forFrame < imageArray.length-1) {
 					g.drawImage(imageArray[forFrame], (int) Math.round(x - rx), 
 							(int) Math.round(y - ry), (int) rx * 2,
 		    	  			(int) ry * 2, null);
 					forFrame++;
 					zeit = System.nanoTime();
-					index++;
 				} else {
 					g.drawImage(imageArray[forFrame], (int) Math.round(x - rx), 
 							(int) Math.round(y - ry), (int) rx * 2,
@@ -98,13 +94,12 @@ public class AnimatedGameobject extends GameObject{
 			} 
 			
 			if(rueckwaerts) {
-				if (seconds >= showtime[index] && backFrame > 1) {
+				if (seconds >= showtime[backFrame] && backFrame > 1) {
 					g.drawImage(imageArray[backFrame], (int) Math.round(x - rx), 
 							(int) Math.round(y - ry), (int) rx * 2,
 		    	  			(int) ry * 2, null);
 					backFrame--;
 					zeit = System.nanoTime();
-					index--;
 				} else {
 					g.drawImage(imageArray[backFrame], (int) Math.round(x - rx), 
 							(int) Math.round(y - ry), (int) rx * 2,
