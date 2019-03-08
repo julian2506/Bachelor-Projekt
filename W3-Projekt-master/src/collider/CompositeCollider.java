@@ -7,18 +7,12 @@ import controller.ObjectController;
 import playground.Playground;
 
 public class CompositeCollider extends Collider {
-	
-	
-	// neue Liste erzeugen, in der Collider gespeichert werden
-	//scol = new LinkedList<Collider>();
 
 	public CompositeCollider(String id, Playground playground, ObjectController controller, 
 			LinkedList<Collider> sc) {
 		
 		super(id, playground, controller);
 		this.scol = sc;
-		
-		//Collider an Liste übergeben
 	}
 
 	@Override
@@ -28,7 +22,7 @@ public class CompositeCollider extends Collider {
 
 	@Override
 	public boolean CollidesWith(LinkedList<Collider> other) {
-		//System.out.println("Check");
+	//System.out.println("Check");
 		for (Collider sc : other) {
 			
 			if (this.id == "rectCol" && sc.id == "circCol") {
@@ -72,14 +66,12 @@ public class CompositeCollider extends Collider {
 							return true;
 						}
 					}
-					
 					if (s.id == "circCol" && sc.id == "rectCol") {
 						if (Collider.checkCollisionCircRect(s.x, s.y, s.width, sc.x, sc.y, sc.width, sc.height)) {
 							return true;
 						}
 					}
 				}
-				
 			}
 		}
 		return false;
