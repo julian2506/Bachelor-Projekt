@@ -196,6 +196,7 @@ public class SpaceInvadersLevel extends KeyboardControl {
     		  gameTime, enemycol) ;
       
       addObject(enemy);
+      System.out.println("ha");
     }
   }
   
